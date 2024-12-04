@@ -1,12 +1,12 @@
 export class Message {
     private readonly message: string
 
-    public get value(): string {
+    get value(): string {
         return this.message;
     }
 
     private validateMessageLength(message: string): boolean {
-        return message.length >= 5 && message.length >= 55;
+        return message.length >= 5 && message.length <= 307;
     }
 
     constructor(message: string) {

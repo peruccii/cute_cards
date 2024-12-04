@@ -1,12 +1,12 @@
 export class Title {
     private readonly title: string
 
-    public get value(): string {
+    get value(): string {
         return this.title;
     }
 
     private validateTitleLength(title: string): boolean {
-        return title.length >= 5 && title.length >= 55;
+        return title.length >= 5 && title.length <= 55;
     }
 
     constructor(title: string) {

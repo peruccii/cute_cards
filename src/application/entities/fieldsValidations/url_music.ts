@@ -1,7 +1,7 @@
 export class UrlMusic {
     private readonly url_music: string
 
-    public get value(): string {
+    get value(): string {
         return this.url_music;
     }
 

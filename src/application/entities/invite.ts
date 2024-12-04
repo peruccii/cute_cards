@@ -1,5 +1,6 @@
 import { InvitePlan } from "./enums/invitePlan"
 import { InviteType } from "./enums/inviteType"
+import { Email } from "./fieldsValidations/email"
 import { Message } from "./fieldsValidations/message"
 import { SubTitle } from "./fieldsValidations/subTitle"
 import { Title } from "./fieldsValidations/title"
@@ -9,7 +10,7 @@ interface InviteProps {
     id: string
     date: Date
     url_music: UrlMusic | null
-    email: string
+    email: Email
     title: Title
     sub_title: SubTitle
     message: Message

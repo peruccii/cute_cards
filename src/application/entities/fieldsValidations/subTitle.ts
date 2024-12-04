@@ -1,12 +1,12 @@
 export class SubTitle {
     private readonly sub_title: string
 
-    public get value(): string {
+    get value(): string {
         return this.sub_title;
     }
 
     private validateSubTitleLength(sub_title: string): boolean {
-        return sub_title.length >= 5 && sub_title.length >= 55;
+        return sub_title.length >= 5 && sub_title.length <= 55;
     }
 
     constructor(sub_title: string) {
