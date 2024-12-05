@@ -14,3 +14,4 @@ describe('Message test', () => {
         expect(() => new Message('a'.repeat(308))).toThrow();
     })
 })
+
