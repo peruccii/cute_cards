@@ -1,3 +1,5 @@
+import { TitleLengthError } from "@application/usecases/errors/title-length-error";
+
 export class Title {
     private readonly title: string
 
@@ -12,7 +14,7 @@ export class Title {
     constructor(title: string) {
         const isTitleValid = this.validateTitleLength(title)
 
-        if (!isTitleValid) throw new Error("Title length error.");
+        if (!isTitleValid) throw new TitleLengthError();
 
         this.title = title;
     }

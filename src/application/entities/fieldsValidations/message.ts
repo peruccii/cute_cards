@@ -1,3 +1,5 @@
+import { MessageLengthError } from "@application/usecases/errors/message-length-error";
+
 export class Message {
     private readonly message: string
 
@@ -12,7 +14,7 @@ export class Message {
     constructor(message: string) {
         const isMessageValid = this.validateMessageLength(message)
 
-        if (!isMessageValid) throw new Error("Message length error.");
+        if (!isMessageValid) throw new MessageLengthError();
 
         this.message = message;
     }

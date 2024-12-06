@@ -1,3 +1,5 @@
+import { EmailInvalidError } from "@application/usecases/errors/email-invalid-error";
+
 export class Email {
     private readonly email: string
 
@@ -18,8 +20,8 @@ export class Email {
         const isEmailLengthValid = this.validateEmailLength(email)
         const isEmailValid = this.validateEmailIsValid(email)
 
-        if (!isEmailLengthValid) throw new Error("Email length error.");
-        if (!isEmailValid) throw new Error("Email is not valid.");
+        if (!isEmailLengthValid) throw new EmailInvalidError();
+        if (!isEmailValid) throw new EmailInvalidError();
 
         this.email = email;
     }

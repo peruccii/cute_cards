@@ -1,3 +1,5 @@
+import { SubTitleLengthError } from "@application/usecases/errors/subtitle-length-error";
+
 export class SubTitle {
     private readonly sub_title: string
 
@@ -12,7 +14,7 @@ export class SubTitle {
     constructor(sub_title: string) {
         const iSubTitleValid = this.validateSubTitleLength(sub_title)
 
-        if (!iSubTitleValid) throw new Error("SubTitle length error.");
+        if (!iSubTitleValid) throw new SubTitleLengthError();
 
         this.sub_title = sub_title;
     }

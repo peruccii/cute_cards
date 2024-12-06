@@ -1,3 +1,5 @@
+import { UrlMusicInvalidError } from "@application/usecases/errors/url_music-invalid-error";
+
 export class UrlMusic {
     private readonly url_music: string
 
@@ -13,7 +15,7 @@ export class UrlMusic {
     constructor(url_music: string) {
         const isUrlMusicValid = this.validateUrlMusic(url_music)
 
-        if (!isUrlMusicValid) throw new Error("Url music is not valid.");
+        if (!isUrlMusicValid) throw new UrlMusicInvalidError();
 
         this.url_music = url_music;
     }

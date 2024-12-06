@@ -1,3 +1,4 @@
+import { UrlMusicInvalidError } from "@application/usecases/errors/url_music-invalid-error";
 import { UrlMusic } from "./url_music"
 
 describe('Url music test', () => {
@@ -13,6 +14,6 @@ describe('Url music test', () => {
     it('should be not able to create a url music with invalid format', () => {
         expect(() => {
             new UrlMusic('This is a url music test.')
-        }).toThrow(Error)
+        }).toThrow(UrlMusicInvalidError)
     })
 })
