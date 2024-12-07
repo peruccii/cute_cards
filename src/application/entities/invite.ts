@@ -6,11 +6,12 @@ import { Message } from "./fieldsValidations/message"
 import { SubTitle } from "./fieldsValidations/subTitle"
 import { Title } from "./fieldsValidations/title"
 import { UrlMusic } from "./fieldsValidations/url_music"
+import { PhotoLimitExceeded } from "@application/usecases/errors/photo-limit-exceeded"
 
 export interface InviteProps {
     date: Date
     url_music: UrlMusic | null
-    email: Email
+    // email: Email
     title: Title
     sub_title: SubTitle
     message: Message
@@ -48,13 +49,13 @@ export class Invite {
         return this.props.url_music
     }
 
-    public set email(email: Email) {
-        this.props.email = email;
-    }
+    // public set email(email: Email) {
+    //     this.props.email = email;
+    // }
 
-    public get email(): Email {
-        return this.props.email
-    }
+    // public get email(): Email {
+    //     return this.props.email
+    // }
 
     public set title(title: Title) {
         this.props.title = title;
@@ -102,5 +103,21 @@ export class Invite {
 
     public get invite_plan(): InvitePlan {
         return this.props.invite_plan
+    }
+
+
+    public verifyQuantityOfPhothosByInvitePlan(plan: InvitePlan, images: string[]) {
+        switch (plan) {
+            case InvitePlan.BASIC:
+                if (images.length > 3) { throw new PhotoLimitExceeded('BASIC', '3'); }
+                break;
+
+            case InvitePlan.PREMIUM:
+                if (images.length > 7) { throw new PhotoLimitExceeded('PREMIUM', '7'); }
+                break;
+
+            default:
+                break;
+        }
     }
 }

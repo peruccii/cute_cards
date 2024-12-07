@@ -1,6 +1,5 @@
 import { InvitePlan } from "@application/entities/enums/invitePlan";
 import { InviteType } from "@application/entities/enums/inviteType";
-import { Email } from "@application/entities/fieldsValidations/email";
 import { Message } from "@application/entities/fieldsValidations/message";
 import { SubTitle } from "@application/entities/fieldsValidations/subTitle";
 import { Title } from "@application/entities/fieldsValidations/title";
@@ -12,7 +11,6 @@ type Override = Partial<InviteProps>
 export function makeInvite(override: Override = {}) {
     return new Invite({
         date: new Date('2024-12-05'),
-        email: new Email('email@example.com'),
         sub_title: new SubTitle('This is a sub_title text'),
         title: new Title('This is a title text'),
         url_music: new UrlMusic('https://www.youtube.com/watch?v=hTWKbfoikeg'),

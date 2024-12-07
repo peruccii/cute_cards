@@ -1,12 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from '../../../app.service';
+import { PrepareInviteCheckout } from '@application/usecases/prepare-invite-checkout';
+import { Body, Controller, Post } from '@nestjs/common';
+import { PrepareInviteCheckoutBody } from '../dtos/prepare-invite-checkout-body';
 
-@Controller()
+@Controller('invites')
 export class InviteController {
-    constructor(private readonly appService: AppService) { }
+    constructor(private readonly prepareInviteCheckout: PrepareInviteCheckout) { }
 
-    @Get()
-    getHello(): string {
-        return this.appService.getHello();
+    @Post()
+    async createCheckout(@Body() body: PrepareInviteCheckoutBody){
+        const checkout_url = await this.prepareInviteCheckout.execute(body);
+        return checkout_url;
     }
 }
