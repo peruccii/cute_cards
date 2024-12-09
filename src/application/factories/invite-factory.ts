@@ -1,3 +1,4 @@
+import { Email } from "@application/entities/fieldsValidations/email";
 import { Message } from "@application/entities/fieldsValidations/message";
 import { SubTitle } from "@application/entities/fieldsValidations/subTitle";
 import { Title } from "@application/entities/fieldsValidations/title";
@@ -12,6 +13,7 @@ export function makeInvite(override: Override) {
         date: new Date(override.date),
         sub_title: new SubTitle(override.sub_title),
         title: new Title(override.title),
+        email: new Email(override.email),
         url_music: override.url_music && override.url_music.length > 0
             ? new UrlMusic(override.url_music)
             : null,

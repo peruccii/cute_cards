@@ -9,6 +9,7 @@ export interface PrepareInviteCheckoutRequest {
     title: string,
     sub_title: string,
     message: string,
+    email: string
     date: Date
     url_music: string | null
     imageUrls: string[]

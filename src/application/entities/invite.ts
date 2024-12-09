@@ -11,7 +11,7 @@ import { PhotoLimitExceeded } from "@application/usecases/errors/photo-limit-exc
 export interface InviteProps {
     date: Date
     url_music: UrlMusic | null
-    // email: Email
+    email: Email
     title: Title
     sub_title: SubTitle
     message: Message
@@ -49,13 +49,13 @@ export class Invite {
         return this.props.url_music
     }
 
-    // public set email(email: Email) {
-    //     this.props.email = email;
-    // }
+    public set email(email: Email) {
+        this.props.email = email;
+    }
 
-    // public get email(): Email {
-    //     return this.props.email
-    // }
+    public get email(): Email {
+        return this.props.email
+    }
 
     public set title(title: Title) {
         this.props.title = title;
