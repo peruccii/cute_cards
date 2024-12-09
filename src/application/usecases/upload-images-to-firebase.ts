@@ -1,15 +1,16 @@
 import { FirebaseRepository } from "@application/repositories/firebase-repository"
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import * as admin from 'firebase-admin';
 @Injectable()
 export class UploadImagesToFirebase implements FirebaseRepository {
 
-    constructor() {
+    constructor(private configService: ConfigService) {
         const serviceAccountPath = 'C:/Users/peruc/Desktop/projects/cute_cards_nestjs/src/application/secrets/serviceAccountKey.json' // TODO: move to env variable
         if (admin.apps.length === 0) {
             admin.initializeApp({
                 credential: admin.credential.cert(serviceAccountPath),
-                storageBucket: process.env.STORAGE_BUCKET_NAME,
+                storageBucket: this.configService.get('STORAGE_BUCKET_NAME'),
             });
         }
     }
