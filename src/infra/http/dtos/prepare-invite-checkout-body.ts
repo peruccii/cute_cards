@@ -10,6 +10,9 @@ export class PrepareInviteCheckoutBody {
     @Length(5, 55)
     sub_title: string
     @IsNotEmpty()
+    @Length(5, 55)
+    email: string
+    @IsNotEmpty()
     @Length(5, 307)
     message: string
     @IsNotEmpty()
