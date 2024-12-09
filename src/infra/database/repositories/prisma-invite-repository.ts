@@ -8,7 +8,7 @@ export class PrismaInviteRepository implements InviteRepository {
     constructor(private prisma: PrismaService) {}
 
     create(invite: Invite) {
-        throw new Error("Method not implemented.");
+        // TODO: CREATE WITH PRISMA
     }
 
 }
