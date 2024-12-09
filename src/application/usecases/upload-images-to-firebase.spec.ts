@@ -1,6 +1,10 @@
 import { makeInvite } from "@test/factories/invite-factory"
 import { UploadImagesToFirebase } from "./upload-images-to-firebase"
 import { Readable } from "stream";
+import { Test, TestingModule } from "@nestjs/testing";
+import { ConfigService } from "@nestjs/config";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 describe('FIREBASE UPLOAD IMAGES TEST', () => {
 
@@ -30,13 +34,37 @@ describe('FIREBASE UPLOAD IMAGES TEST', () => {
         stream: Readable.from('mock file content_2'),
     };
 
-    it('should be able to upload image(s) to firebase storage', async () => {
+    let uploadImage: UploadImagesToFirebase;
+    let configService: ConfigService;
 
-        const uploadService = new UploadImagesToFirebase()
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [
+                UploadImagesToFirebase,
+                {
+                    provide: ConfigService,
+                    useValue: {
+                        get: jest.fn().mockImplementation((key: string) => {
+                            if (key === 'STORAGE_BUCKET_NAME') { // verifica se a key usada em "UploadImagesToFirebase" coincide com essa usado no mock
+                                return process.env.STORAGE_BUCKET_NAME;
+                            }
+                            return null;
+                        }),
+                    },
+                },
+            ],
+        }).compile();
+
+        uploadImage = module.get<UploadImagesToFirebase>(UploadImagesToFirebase);
+        configService = module.get<ConfigService>(ConfigService);
+    });
+
+
+    it('should be able to upload image(s) to firebase storage', async () => {
 
         const invite = makeInvite()
 
-        const imagesUrls = await uploadService.uploadImages([mockFile, mockFile_2], invite.email.value)
+        const imagesUrls = await uploadImage.uploadImages([mockFile, mockFile_2], invite.email.value)
 
         expect(Array.isArray(imagesUrls)).toBe(true);
 
