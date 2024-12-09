@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import Stripe from "stripe";
 
 @Injectable()
 export class HandleEventsStripe {
     private stripe;
 
-    constructor() {
+    constructor(private configService: ConfigService ) {
         this.stripe = new Stripe(process.env.STRIPE_API_KEY!, {
             apiVersion: '2024-11-20.acacia'
         })
