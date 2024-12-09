@@ -1,14 +1,24 @@
 import { PrepareInviteCheckout } from '@application/usecases/prepare-invite-checkout';
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { PrepareInviteCheckoutBody } from '../dtos/prepare-invite-checkout-body';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { FirebaseRepository } from '@application/repositories/firebase-repository';
 
 @Controller('invites')
 export class InviteController {
-    constructor(private readonly prepareInviteCheckout: PrepareInviteCheckout) { }
+    constructor(
+        private readonly prepareInviteCheckout: PrepareInviteCheckout,
+        private readonly firebaseRepository: FirebaseRepository,
+    ) { }
 
-    @Post()
-    async createCheckout(@Body() body: PrepareInviteCheckoutBody){
-        const checkout_url = await this.prepareInviteCheckout.execute(body);
+    @Post('checkout')
+    @UseInterceptors(FilesInterceptor('images'))
+    async createCheckout(@Body() body: PrepareInviteCheckoutBody, @UploadedFiles() files: Express.Multer.File[]) {
+        const updatedBody = {
+            ...body,
+            imagesUrls: await this.firebaseRepository.uploadImages(files, 'a')
+        }
+        const checkout_url = await this.prepareInviteCheckout.execute(updatedBody);
         return checkout_url;
     }
 }

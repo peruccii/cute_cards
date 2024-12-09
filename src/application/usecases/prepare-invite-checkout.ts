@@ -23,21 +23,22 @@ export interface PrepareInviteCheckoutResponse {
 @Injectable()
 export class PrepareInviteCheckout {
     constructor(
-        private firebaseRepository: FirebaseRepository,
         private checkoutRepository: CheckoutRepository
     ) { }
 
-    async execute(request: PrepareInviteCheckoutRequest): Promise<PrepareInviteCheckoutResponse> {
+    async execute(request: PrepareInviteCheckoutRequest): Promise<PrepareInviteCheckoutResponse | null> {
 
-        const invite = makeInvite(request);
+        const { imageUrls } = request;
+
+        const invite = makeInvite({ ...request, imageUrls: imageUrls });
 
         invite.verifyQuantityOfPhothosByInvitePlan(invite.invite_plan, invite.imageUrls);
 
-        const imagesUrl = await this.firebaseRepository.uploadImages(invite.imageUrls, 'name folder firebase [ identificador: email user ]');
-
-        invite.imageUrls = imagesUrl;
-
         const url_checkout = await this.checkoutRepository.createCheckoutSession(invite)
+
+        if (!url_checkout) return null
+
+        // create invite based on event emmiter on webhook controller, if checkout.session.completed
 
         return { url_checkout }
     }

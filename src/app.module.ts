@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './infra/http/controllers/invite.controller';
-import { AppService } from './app.service';
 import { StripeModule } from './stripe/stripe.module';
+import { HttpModule } from '@infra/http/http.module';
+import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
-    imports: [StripeModule],
-    controllers: [AppController],
-    providers: [AppService],
+    imports: [
+        StripeModule.forRootAsync(),
+        HttpModule,
+        DatabaseModule,
+    ],
 })
 export class AppModule { }
