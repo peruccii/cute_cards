@@ -14,7 +14,7 @@ export class HandleEventsStripe {
 
     verifyEvent(request: any): Stripe.Event {
         const signature = request.headers['stripe-signature'];
-        const endpointSecret = process.env.WHSEC_STRIPE! // Todo: maybe alternate to this.config.service;
+        const endpointSecret = this.configService.get('WHSEC_STRIPE')!
 
         return this.stripe.webhooks.constructEvent(
             request.rawBody,
@@ -26,5 +26,6 @@ export class HandleEventsStripe {
     async handleSessionCompleted(event: Stripe.Event) {
         const session = event.data.object as Stripe.Checkout.Session;
         console.log(`session completed ${session.id}}`);
+        return 'session completed'
     }
 }
