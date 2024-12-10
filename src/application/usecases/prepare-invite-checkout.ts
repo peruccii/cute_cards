@@ -2,7 +2,6 @@ import { InvitePlan } from "@application/entities/enums/invitePlan";
 import { InviteType } from "@application/entities/enums/inviteType";
 import { makeInvite } from "@application/factories/invite-factory";
 import { CheckoutRepository } from "@application/repositories/checkout-repository";
-import { FirebaseRepository } from "@application/repositories/firebase-repository";
 import { Injectable } from "@nestjs/common";
 
 export interface PrepareInviteCheckoutRequest {

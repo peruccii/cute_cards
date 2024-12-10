@@ -4,7 +4,6 @@ import { Readable } from "stream";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ConfigService } from "@nestjs/config";
 import * as dotenv from 'dotenv';
-dotenv.config();
 
 describe('FIREBASE UPLOAD IMAGES TEST', () => {
 
@@ -35,9 +34,9 @@ describe('FIREBASE UPLOAD IMAGES TEST', () => {
     };
 
     let uploadImage: UploadImagesToFirebase;
-    let configService: ConfigService;
 
     beforeEach(async () => {
+        dotenv.config();
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UploadImagesToFirebase,
@@ -56,7 +55,7 @@ describe('FIREBASE UPLOAD IMAGES TEST', () => {
         }).compile();
 
         uploadImage = module.get<UploadImagesToFirebase>(UploadImagesToFirebase);
-        configService = module.get<ConfigService>(ConfigService);
+    
     });
 
 

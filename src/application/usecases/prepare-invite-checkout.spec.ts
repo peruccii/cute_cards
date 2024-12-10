@@ -5,8 +5,6 @@ import { Test, TestingModule } from "@nestjs/testing";
 
 describe('CHECKOUT TEST', () => {
     let inviteCheckout: CreateInviteCheckoutSession;
-    let configService: ConfigService;
-
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
@@ -21,7 +19,6 @@ describe('CHECKOUT TEST', () => {
         }).compile();
 
         inviteCheckout = module.get<CreateInviteCheckoutSession>(CreateInviteCheckoutSession);
-        configService = module.get<ConfigService>(ConfigService);
     });
 
     it('should be able to create invite and return a stripe url string checkout', async () => {
