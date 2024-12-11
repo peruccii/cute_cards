@@ -1,6 +1,7 @@
 import { Email } from "@application/entities/fieldsValidations/email";
 import { MailRepository } from "@application/repositories/mail-repository";
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { Resend } from "resend";
 
 @Injectable()
@@ -8,8 +9,8 @@ export class Resendmail implements MailRepository {
 
     private resend
 
-    constructor() {
-        this.resend = new Resend('re_dn4t44i3_47vgKJq23bJ8BZB7qtHajEDP');
+    constructor(private configService: ConfigService) {
+        this.resend = new Resend(this.configService.get('RESEND_KEY'));
     }
 
     async sendEmail(email: Email) {
