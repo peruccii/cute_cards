@@ -8,6 +8,8 @@ import { CreateInviteCheckoutSession } from "@application/usecases/create-checko
 import { CheckoutRepository } from "@application/repositories/checkout-repository";
 import { HandleEventsStripe } from "@application/usecases/handle-events-stripe";
 import { ConfigModule } from "@nestjs/config";
+import { Resendmail } from "@application/usecases/mail/resend-mail.service";
+import { MailRepository } from "@application/repositories/mail-repository";
 
 @Module({
     imports: [ConfigModule.forRoot({
@@ -16,6 +18,11 @@ import { ConfigModule } from "@nestjs/config";
     })],
     providers: [
         HandleEventsStripe,
+        Resendmail,
+        {
+            provide: MailRepository,
+            useClass: Resendmail,
+        },
         CreateInviteCheckoutSession,
         {
             provide: CheckoutRepository,
