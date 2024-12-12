@@ -1,9 +1,10 @@
-import { Email } from "@application/entities/fieldsValidations/email";
-import { MailRepository } from "@application/repositories/mail-repository";
+import { CreateSendEmailRequest, MailRepository } from "@application/repositories/mail-repository";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Resend } from "resend";
 import { ResendSendMailError } from "../errors/resend-send-email-error";
+import { InviteTypeConstants } from "../constants/invite_type_constants";
+import { InviteType } from "@application/entities/enums/inviteType";
 
 @Injectable()
 export class Resendmail implements MailRepository {
@@ -14,14 +15,34 @@ export class Resendmail implements MailRepository {
         this.resend = new Resend(this.configService.get('RESEND_KEY'));
     }
 
-    async sendEmail(email: Email) {
+    async sendEmail(request: CreateSendEmailRequest) {
         const response = await this.resend.emails.send({
             from: 'Acme <onboarding@resend.dev>',
-            to: [email.value],
+            to: [request.email.value],
             subject: 'hello world',
-            html: '<p>it works!</p>',
+            html: checkInviteTypeAndReturnHtml(request),
         });
         if (!response.data?.id) throw new ResendSendMailError();
         return response
+    }
+}
+
+export function checkInviteTypeAndReturnHtml({ inviteType, clientName, inviteId }: CreateSendEmailRequest): string {
+
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/card/${inviteId}`
+
+    switch (inviteType) {
+        case InviteType.LOVE: {
+            const invite_type_constants = new InviteTypeConstants()
+            invite_type_constants.getLoveContent(qrCodeUrl, clientName)
+            return ''
+        }
+        case InviteType.BIRTHDAY: {
+
+        }
+        case InviteType.BESTFRIENDS: {
+
+        }
+        default: return ''
     }
 }
