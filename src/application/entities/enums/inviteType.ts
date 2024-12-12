@@ -1,5 +1,5 @@
 export enum InviteType {
-    LOVE,
-    BIRTHDAY,
-    BESTFRIENDS
+    LOVE = 'LOVE',
+    BIRTHDAY = 'BIRTHDAY',
+    BESTFRIENDS = 'BESTFRIENDS'
 }
