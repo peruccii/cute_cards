@@ -9,8 +9,8 @@ import { ConfigService } from "@nestjs/config";
 export class CreateInviteCheckoutSession implements CheckoutRepository {
     private stripe: Stripe;
 
-    constructor(private configService: ConfigService ) {
-        this.stripe = new Stripe(this.configService.get('STRIPE_API_KEY')! , {
+    constructor(private configService: ConfigService) {
+        this.stripe = new Stripe(this.configService.get('STRIPE_API_KEY')!, {
             apiVersion: '2024-11-20.acacia'
         })
     }
@@ -28,7 +28,8 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
                             images: ['https://example.com/image.png'],
                             metadata: {
                                 urlMusic: 'https://example.com/music.mp3',
-                                extraInfo: 'Some custom information',
+                                inviteType: invite.invite_type,
+                                inviteId: invite.id
                             },
                         },
                         unit_amount: invite.invite_plan === InvitePlan.BASIC ? 2000 : 3000,
