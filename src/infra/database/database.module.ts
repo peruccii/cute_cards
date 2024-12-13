@@ -42,7 +42,9 @@ import { MailRepository } from "@application/repositories/mail-repository";
     exports: [
         InviteRepository,
         FirebaseRepository,
-        CheckoutRepository
+        CheckoutRepository,
+        HandleEventsStripe,
+        MailRepository, 
     ]
 })
 export class DatabaseModule { }

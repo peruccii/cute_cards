@@ -37,6 +37,6 @@ export class HandleEventsStripe {
             inviteId: session.metadata!.inviteId
         }
 
-        if (session.customer_email) await this.mailRepository.sendEmail(request)
+        return await this.mailRepository.sendEmail(request)
     }
 }

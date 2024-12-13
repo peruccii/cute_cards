@@ -4,6 +4,9 @@ import { ConfigService } from "@nestjs/config";
 import { Email } from "@application/entities/fieldsValidations/email";
 import * as dotenv from 'dotenv';
 import { ResendSendMailError } from "../errors/resend-send-email-error";
+import { CreateSendEmailRequest } from "@application/repositories/mail-repository";
+import { randomUUID } from "node:crypto";
+import { InviteType } from "@application/entities/enums/inviteType";
 
 describe('RESEND MAIL TEST', () => {
 
@@ -33,12 +36,20 @@ describe('RESEND MAIL TEST', () => {
     });
 
     it('should be able to resend send email', async () => {
-        const email = await resend.sendEmail(new Email('delivered@resend.dev'))
 
-        const emailSend = email.data?.id
+        const request: CreateSendEmailRequest = {
+            email: new Email('delivered@resend.dev'),
+            clientName: 'teste',
+            inviteId: randomUUID(),
+            inviteType: InviteType.LOVE
+        }
 
-        if (!emailSend) throw new ResendSendMailError();
+        const email = await resend.sendEmail(request)
 
-        expect(emailSend).toBeTruthy()
+        const emailId = email
+
+        if (!emailId) throw new ResendSendMailError();
+
+        expect(emailId).toBeTruthy()
     })
 })

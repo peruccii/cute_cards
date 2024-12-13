@@ -1,12 +1,16 @@
-import Stripe from "stripe"
-import { HandleEventsStripe } from "./handle-events-stripe"
-import { ConfigService } from "@nestjs/config";
-import { Test, TestingModule } from "@nestjs/testing";
+import { MailRepository } from '@application/repositories/mail-repository';
+import { HandleEventsStripe } from './handle-events-stripe';
+import { ConfigService } from '@nestjs/config';
+import { Test, TestingModule } from '@nestjs/testing';
 import * as dotenv from 'dotenv';
+import Stripe from 'stripe';
 
 describe('HANDLE EVENTS STRIPE TEST', () => {
-
     let handle_events: HandleEventsStripe;
+
+    const mailRepositoryMock = {
+        sendEmail: jest.fn().mockResolvedValue({ id: 'test-id' }),
+    };
 
     beforeEach(async () => {
         dotenv.config();
@@ -14,15 +18,15 @@ describe('HANDLE EVENTS STRIPE TEST', () => {
             providers: [
                 HandleEventsStripe,
                 {
+                    provide: MailRepository,
+                    useValue: mailRepositoryMock,
+                },
+                {
                     provide: ConfigService,
                     useValue: {
                         get: jest.fn().mockImplementation((key: string) => {
-                            if (key === 'STRIPE_API_KEY') {
-                                return process.env.STRIPE_API_KEY;
-                            }
-                            if (key === 'WHSEC_STRIPE') {
-                                return process.env.WHSEC_STRIPE;
-                            }
+                            if (key === 'STRIPE_API_KEY') return process.env.STRIPE_API_KEY;
+                            if (key === 'WHSEC_STRIPE') return process.env.WHSEC_STRIPE;
                             return null;
                         }),
                     },
@@ -31,27 +35,30 @@ describe('HANDLE EVENTS STRIPE TEST', () => {
         }).compile();
 
         handle_events = module.get<HandleEventsStripe>(HandleEventsStripe);
-
     });
 
-    let event: Stripe.Event
+    let event: Stripe.Event;
 
     it('should be able to handle a session completed event', async () => {
-
         event = {
             type: 'checkout.session.completed',
             data: {
                 object: {
                     id: 'evt_1',
-                    amount_total: 1000,
+                    customer_email: 'delivered@resend.dev',
+                    customer_details: { name: 'Test User' },
+                    metadata: {
+                        inviteType: 'LOVE',
+                        inviteId: 'id-test-01',
+                    },
                 },
             },
-        } as Stripe.Event;
+        } as unknown as Stripe.Event;
 
         if (event.type === 'checkout.session.completed') {
-            const result = await handle_events.handleSessionCompleted(event)
+            const rs = await handle_events.handleSessionCompleted(event);
 
-            expect(result).toContain('session completed')
+            expect(rs).toEqual({ id: 'test-id' });
         }
-    })
-})
+    });
+});
