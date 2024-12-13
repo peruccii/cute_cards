@@ -1,6 +1,8 @@
 import { Email } from "@application/entities/fieldsValidations/email";
 
-export interface CreateEmailResponse { }
+export interface CreateEmailResponse {
+    id: string
+ }
 
 export interface CreateSendEmailRequest {
     email: Email
