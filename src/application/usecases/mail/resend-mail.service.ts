@@ -34,18 +34,22 @@ function checkInviteTypeAndReturnHtml({ inviteType, clientName, inviteId }: Crea
 
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/card/${inviteId}`
 
+    const invite_type_constants = new InviteTypeConstants()
+
     switch (inviteType) {
+
         case InviteType.LOVE: {
-            const invite_type_constants = new InviteTypeConstants()
-            invite_type_constants.getLoveContent(qrCodeUrl, clientName)
-            return '<p>Thanks for the payment</p>'
+            return invite_type_constants.getLoveContent(qrCodeUrl, clientName)
         }
+
         case InviteType.BIRTHDAY: {
-            return '<p>Thanks for the payment</p>'
+            return invite_type_constants.getLoveContent(qrCodeUrl, clientName)
         }
+
         case InviteType.BESTFRIENDS: {
-            return '<p>Thanks for the payment</p>'
+            return invite_type_constants.getLoveContent(qrCodeUrl, clientName)
         }
+
         default: {
             return '<p>Thanks for the payment</p>'
         }
