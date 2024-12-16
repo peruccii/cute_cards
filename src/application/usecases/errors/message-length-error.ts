@@ -1,5 +1,5 @@
 export class MessageLengthError extends Error {
-    constructor() {
-        super('Message length error.')
-    }
+  constructor() {
+    super('Message length error.');
+  }
 }

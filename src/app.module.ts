@@ -4,10 +4,6 @@ import { HttpModule } from '@infra/http/http.module';
 import { DatabaseModule } from '@infra/database/database.module';
 
 @Module({
-    imports: [
-        StripeModule.forRootAsync(),
-        HttpModule,
-        DatabaseModule,
-    ],
+  imports: [StripeModule.forRootAsync(), HttpModule, DatabaseModule],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,5 +1,5 @@
 export class TitleLengthError extends Error {
-    constructor() {
-        super('Title length error.')
-    }
+  constructor() {
+    super('Title length error.');
+  }
 }

@@ -1,21 +1,21 @@
-import { SubTitleLengthError } from "@application/usecases/errors/subtitle-length-error";
+import { SubTitleLengthError } from '@application/usecases/errors/subtitle-length-error';
 
 export class SubTitle {
-    private readonly sub_title: string
+  private readonly sub_title: string;
 
-    get value(): string {
-        return this.sub_title;
-    }
+  get value(): string {
+    return this.sub_title;
+  }
 
-    private validateSubTitleLength(sub_title: string): boolean {
-        return sub_title.length >= 5 && sub_title.length <= 55;
-    }
+  private validateSubTitleLength(sub_title: string): boolean {
+    return sub_title.length >= 5 && sub_title.length <= 55;
+  }
 
-    constructor(sub_title: string) {
-        const iSubTitleValid = this.validateSubTitleLength(sub_title)
+  constructor(sub_title: string) {
+    const iSubTitleValid = this.validateSubTitleLength(sub_title);
 
-        if (!iSubTitleValid) throw new SubTitleLengthError();
+    if (!iSubTitleValid) throw new SubTitleLengthError();
 
-        this.sub_title = sub_title;
-    }
+    this.sub_title = sub_title;
+  }
 }

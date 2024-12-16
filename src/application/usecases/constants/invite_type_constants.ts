@@ -1,7 +1,6 @@
 export class InviteTypeConstants {
-
-    getLoveContent(qrCodeUrl: string, clientName: string) {
-        return `
+  getLoveContent(qrCodeUrl: string, clientName: string) {
+    return `
             <!DOCTYPE html>
             <html lang="en">
             <head>
@@ -42,5 +41,5 @@ export class InviteTypeConstants {
             </body>
             </html>
         `;
-    }
+  }
 }

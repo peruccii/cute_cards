@@ -5,16 +5,15 @@ import { CreateInviteCheckoutSession } from '@application/usecases/create-checko
 import { DatabaseModule } from '@infra/database/database.module';
 import { ConfigModule } from '@nestjs/config';
 
-
 @Module({
-    imports: [DatabaseModule, ConfigModule.forRoot({
-        isGlobal: true,
-        envFilePath: '.env',
-    })],
-    controllers: [InviteController],
-    providers: [
-        PrepareInviteCheckout,
-        CreateInviteCheckoutSession,
-    ]
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+  ],
+  controllers: [InviteController],
+  providers: [PrepareInviteCheckout, CreateInviteCheckoutSession],
 })
-export class HttpModule { }
+export class HttpModule {}
