@@ -10,6 +10,7 @@ export interface PrepareInviteCheckoutRequest {
   message: string;
   email: string;
   date: Date;
+  duration_invite: Date;
   url_music: string | null;
   imageUrls: string[];
   invite_type: InviteType;
@@ -35,6 +36,8 @@ export class PrepareInviteCheckout {
       invite.invite_plan,
       invite.imageUrls,
     );
+
+    invite.varifyIfUserCanPutUrlMusic(request.invite_plan);
 
     const url_checkout =
       await this.checkoutRepository.createCheckoutSession(invite);
