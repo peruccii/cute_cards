@@ -18,6 +18,7 @@ export interface InviteProps {
   imageUrls: string[];
   invite_type: InviteType;
   invite_plan: InvitePlan;
+  duration_invite: Date;
 }
 
 export class Invite {
@@ -35,6 +36,14 @@ export class Invite {
 
   public set date(date: Date) {
     this.props.date = date;
+  }
+
+  public get duration_invite(): Date {
+    return this.props.duration_invite;
+  }
+
+  public set duration_invite(duration_invite: Date) {
+    this.props.duration_invite = duration_invite;
   }
 
   public get date(): Date {
@@ -103,6 +112,11 @@ export class Invite {
 
   public get invite_plan(): InvitePlan {
     return this.props.invite_plan;
+  }
+
+  public varifyIfUserCanPutUrlMusic(invitePlan: InvitePlan) {
+    if (invitePlan != InvitePlan.PREMIUM)
+      throw new Error(`Type ${InvitePlan} cannot select music.`);
   }
 
   public verifyQuantityOfPhothosByInvitePlan(

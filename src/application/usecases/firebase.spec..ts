@@ -1,5 +1,5 @@
 import { makeInvite } from '@test/factories/invite-factory';
-import { UploadImagesToFirebase } from './upload-images-to-firebase';
+import { Firebase } from './upload-images-to-firebase';
 import { Readable } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
@@ -32,13 +32,13 @@ describe('FIREBASE UPLOAD IMAGES TEST', () => {
     stream: Readable.from('mock file content_2'),
   };
 
-  let uploadImage: UploadImagesToFirebase;
+  let uploadImage: Firebase;
 
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        UploadImagesToFirebase,
+        Firebase,
         {
           provide: ConfigService,
           useValue: {
@@ -54,7 +54,7 @@ describe('FIREBASE UPLOAD IMAGES TEST', () => {
       ],
     }).compile();
 
-    uploadImage = module.get<UploadImagesToFirebase>(UploadImagesToFirebase);
+    uploadImage = module.get<Firebase>(Firebase);
   });
 
   it('should be able to upload image(s) to firebase storage', async () => {

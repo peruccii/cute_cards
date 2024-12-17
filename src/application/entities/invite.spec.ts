@@ -39,4 +39,15 @@ describe('INVITE TEST', () => {
       );
     }).toThrow(PhotoLimitExceeded);
   });
+
+  it('should be not able to create invite with url music as a invite of type basic', () => {
+    const invite = makeInvite({
+      invite_plan: InvitePlan.BASIC,
+      url_music: new UrlMusic('https://www.youtube.com/watch?v=hTWKbfoikeg'),
+    });
+
+    expect(() => {
+      invite.varifyIfUserCanPutUrlMusic(invite.invite_plan);
+    }).toThrow(Error);
+  });
 });

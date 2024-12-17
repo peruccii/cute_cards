@@ -3,4 +3,6 @@ export abstract class FirebaseRepository {
     imagesUrl: Express.Multer.File[],
     email: string,
   ): Promise<string[]>; // custom promise
+
+  abstract delete(emailUser: string);
 }

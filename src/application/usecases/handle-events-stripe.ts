@@ -38,10 +38,14 @@ export class HandleEventsStripe {
     const request: CreateSendEmailRequest = {
       email: new Email(session.customer_email!),
       inviteType: session.metadata!.inviteType,
-      clientName: session.customer_details?.name!,
+      clientName: session.customer_details!.name!,
       inviteId: session.metadata!.inviteId,
     };
 
     return await this.mailRepository.sendEmail(request);
+  }
+
+  async handleSessionCancelled() {
+    // delete folder firebase
   }
 }
