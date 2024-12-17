@@ -27,9 +27,11 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
               name: `${invite.invite_type} ${invite.invite_plan}`,
               images: ['https://example.com/image.png'],
               metadata: {
-                urlMusic: 'https://example.com/music.mp3',
-                inviteType: invite.invite_type,
+                url_music: invite.url_music?.value || null,
+                invite_type: invite.invite_type,
                 inviteId: invite.id,
+                invite_plan: invite.invite_plan,
+                date: invite.date.getDate(),
               },
             },
             unit_amount: invite.invite_plan === InvitePlan.BASIC ? 2000 : 3000,
