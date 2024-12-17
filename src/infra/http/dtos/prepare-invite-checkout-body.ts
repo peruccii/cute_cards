@@ -24,4 +24,6 @@ export class PrepareInviteCheckoutBody {
   invite_type: InviteType;
   @IsNotEmpty()
   invite_plan: InvitePlan;
+  @IsNotEmpty()
+  duration_invite: Date;
 }

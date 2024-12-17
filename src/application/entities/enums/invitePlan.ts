@@ -1,4 +1,4 @@
 export enum InvitePlan {
-  BASIC,
-  PREMIUM,
+  BASIC = 'BASIC',
+  PREMIUM = 'PREMIUM',
 }

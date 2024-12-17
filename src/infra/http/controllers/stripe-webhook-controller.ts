@@ -1,9 +1,13 @@
+import { InviteRepository } from '@application/repositories/invite-repository';
 import { HandleEventsStripe } from '@application/usecases/handle-events-stripe';
 import { Controller, Post, Req } from '@nestjs/common';
 
 @Controller('webhook')
 export class StripeWebhookController {
-  constructor(private readonly stripeService: HandleEventsStripe) {}
+  constructor(
+    private readonly stripeService: HandleEventsStripe,
+    private inviteRepository: InviteRepository,
+  ) {}
 
   @Post('stripe')
   async handleStripeWebhook(@Req() request: any) {
@@ -13,7 +17,7 @@ export class StripeWebhookController {
     }
 
     if (event.type === 'checkout.session.expired') {
-      await this.stripeService.handleSessionCancelled();
+      await this.stripeService.handleSessionExpired();
     }
     return { received: true };
   }

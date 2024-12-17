@@ -1,4 +1,3 @@
-import { Email } from '@application/entities/fieldsValidations/email';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';

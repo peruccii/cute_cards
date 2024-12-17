@@ -1,5 +1,5 @@
 import { makeInvite } from '@test/factories/invite-factory';
-import { Firebase } from './upload-images-to-firebase';
+import { Firebase } from './firebase-methods';
 import { Readable } from 'stream';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
