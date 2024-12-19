@@ -1,13 +1,14 @@
 import { HandleEventsStripe } from '@application/usecases/handle-events-stripe';
-import { Controller, Post, Req } from '@nestjs/common';
+import { Controller, Post, RawBodyRequest, Req } from '@nestjs/common';
 
 @Controller('webhook')
 export class StripeWebhookController {
   constructor(private readonly stripeService: HandleEventsStripe) {}
 
-  @Post('stripe')
-  async handleStripeWebhook(@Req() request: any) {
-    const event = this.stripeService.verifyEvent(request);
+  @Post()
+  async handleStripeWebhook(@Req() req: RawBodyRequest<Request>) {
+    const event = this.stripeService.verifyEvent(req);
+
     if (event.type === 'checkout.session.completed') {
       await this.stripeService.handleSessionCompleted(event);
     }
