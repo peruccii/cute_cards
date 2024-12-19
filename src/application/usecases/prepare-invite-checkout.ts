@@ -55,6 +55,7 @@ export class PrepareInviteCheckout {
 
   @OnEvent('invite.created')
   async createInvite(data: Invite) {
+    console.log('on event arrived here!');
     await this.inviteRepository.create(data);
   }
 }
