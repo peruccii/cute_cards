@@ -1,9 +1,12 @@
 import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { InviteType } from '@application/entities/enums/inviteType';
+import { Invite } from '@application/entities/invite';
 import { makeInvite } from '@application/factories/invite-factory';
 import { CheckoutRepository } from '@application/repositories/checkout-repository';
 import { InviteRepository } from '@application/repositories/invite-repository';
+import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite-mappers';
 import { Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 
 export interface PrepareInviteCheckoutRequest {
   title: string;
@@ -36,18 +39,22 @@ export class PrepareInviteCheckout {
 
     const invite = makeInvite({ ...request, imageUrls: imageUrls });
 
-    invite.verifyQuantityOfPhothosByInvitePlan(
-      invite.invite_plan,
-      invite.imageUrls,
-    );
+    invite.verifyQuantityOfPhothosByInvitePlan(invite.invite_plan, imageUrls);
 
-    invite.varifyIfUserCanPutUrlMusic(request.invite_plan);
+    invite.varifyIfUserCanPutUrlMusic(invite.invite_plan);
+
+    const prismaInvite = PrismaInviteMapper.toPrisma(invite);
 
     const url_checkout =
-      await this.checkoutRepository.createCheckoutSession(invite);
+      await this.checkoutRepository.createCheckoutSession(prismaInvite);
 
     if (!url_checkout) return null;
 
     return { url_checkout };
+  }
+
+  @OnEvent('invite.created')
+  async createInvite(data: Invite) {
+    await this.inviteRepository.create(data);
   }
 }
