@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as dotenv from 'dotenv';
 import Stripe from 'stripe';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 describe('HANDLE EVENTS STRIPE TEST', () => {
   let handle_events: HandleEventsStripe;
@@ -17,6 +18,7 @@ describe('HANDLE EVENTS STRIPE TEST', () => {
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
+      imports: [EventEmitterModule.forRoot()],
       providers: [
         HandleEventsStripe, // vai passar a ter o "mailRepositoryMock" como repository
         {

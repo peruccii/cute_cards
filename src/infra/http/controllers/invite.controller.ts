@@ -25,7 +25,7 @@ export class InviteController {
   ) {
     const updatedBody = {
       ...body,
-      imagesUrls: await this.firebaseRepository.uploadImages(files, body.email),
+      imageUrls: await this.firebaseRepository.uploadImages(files, body.email),
     };
     const checkout_url = await this.prepareInviteCheckout.execute(updatedBody);
     return checkout_url;

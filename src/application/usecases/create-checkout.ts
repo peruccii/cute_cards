@@ -1,9 +1,13 @@
 import Stripe from 'stripe';
 import { CheckoutRepository } from '@application/repositories/checkout-repository';
-import { Invite } from '@application/entities/invite';
+import { Invite, InviteProps } from '@application/entities/invite';
 import { Injectable } from '@nestjs/common';
 import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { ConfigService } from '@nestjs/config';
+
+export interface Metadata extends InviteProps {
+  id: string;
+}
 
 @Injectable()
 export class CreateInviteCheckoutSession implements CheckoutRepository {
@@ -27,11 +31,15 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
               name: `${invite.invite_type} ${invite.invite_plan}`,
               images: ['https://example.com/image.png'],
               metadata: {
+                id: invite.id,
                 url_music: invite.url_music?.value || null,
                 invite_type: invite.invite_type,
                 inviteId: invite.id,
                 invite_plan: invite.invite_plan,
                 date: invite.date.getDate(),
+                title: invite.title as unknown as string,
+                sub_title: String(invite.sub_title as unknown as string),
+                message: invite.message as unknown as string,
               },
             },
             unit_amount: invite.invite_plan === InvitePlan.BASIC ? 2000 : 3000,

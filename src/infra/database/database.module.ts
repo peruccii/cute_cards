@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { PrismaInviteRepository } from './repositories/prisma-invite-repository';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
-import { UploadImagesToFirebase } from '@application/usecases/upload-images-to-firebase';
+import { Firebase } from '@application/usecases/firebase-methods';
 import { CreateInviteCheckoutSession } from '@application/usecases/create-checkout';
 import { CheckoutRepository } from '@application/repositories/checkout-repository';
 import { HandleEventsStripe } from '@application/usecases/handle-events-stripe';
@@ -30,10 +30,10 @@ import { MailRepository } from '@application/repositories/mail-repository';
       provide: CheckoutRepository,
       useClass: CreateInviteCheckoutSession,
     },
-    UploadImagesToFirebase,
+    Firebase,
     {
       provide: FirebaseRepository,
-      useClass: UploadImagesToFirebase,
+      useClass: Firebase,
     },
     PrismaService,
     {

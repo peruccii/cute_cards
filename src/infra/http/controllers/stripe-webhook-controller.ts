@@ -1,13 +1,9 @@
-import { InviteRepository } from '@application/repositories/invite-repository';
 import { HandleEventsStripe } from '@application/usecases/handle-events-stripe';
 import { Controller, Post, Req } from '@nestjs/common';
 
 @Controller('webhook')
 export class StripeWebhookController {
-  constructor(
-    private readonly stripeService: HandleEventsStripe,
-    private inviteRepository: InviteRepository,
-  ) {}
+  constructor(private readonly stripeService: HandleEventsStripe) {}
 
   @Post('stripe')
   async handleStripeWebhook(@Req() request: any) {

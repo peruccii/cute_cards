@@ -1,5 +1,6 @@
 import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { InviteType } from '@application/entities/enums/inviteType';
+import { Type } from 'class-transformer';
 import { IsDate, IsNotEmpty, Length } from 'class-validator';
 
 export class PrepareInviteCheckoutBody {
@@ -17,6 +18,7 @@ export class PrepareInviteCheckoutBody {
   message: string;
   @IsNotEmpty()
   @IsDate()
+  @Type(() => Date)
   date: Date;
   url_music: string | null;
   imageUrls: string[];

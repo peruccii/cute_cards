@@ -116,15 +116,17 @@ export class Invite {
 
   public varifyIfUserCanPutUrlMusic(invitePlan: InvitePlan) {
     if (invitePlan != InvitePlan.PREMIUM)
-      throw new Error(`Type ${InvitePlan} cannot select music.`);
+      throw new Error(`Type ${invitePlan} cannot select music.`);
   }
 
   public verifyQuantityOfPhothosByInvitePlan(
     plan: InvitePlan,
     images: string[],
   ) {
+    console.log(images);
     switch (plan) {
       case InvitePlan.BASIC:
+        console.log(images);
         if (images.length > 3) {
           throw new PhotoLimitExceeded('BASIC', '3');
         }
@@ -132,6 +134,7 @@ export class Invite {
 
       case InvitePlan.PREMIUM:
         if (images.length > 7) {
+          console.log(images);
           throw new PhotoLimitExceeded('PREMIUM', '7');
         }
         break;

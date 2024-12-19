@@ -7,7 +7,7 @@ import * as admin from 'firebase-admin';
 export class Firebase implements FirebaseRepository {
   constructor(private configService: ConfigService) {
     const serviceAccountPath =
-      'C:/Users/peruc/Desktop/projects/cute_cards_nestjs/src/application/secrets/serviceAccountKey.json'; // TODO: move to env variable
+      '/home/prc/www/cute_cards/src/application/secrets/serviceAccountKey.json'; // TODO: move to env variable
     if (admin.apps.length === 0) {
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccountPath),
@@ -22,7 +22,7 @@ export class Firebase implements FirebaseRepository {
   ): Promise<string[]> {
     const bucket = admin.storage().bucket();
 
-    const urls = await Promise.all(
+    const urls: string[] = await Promise.all(
       files.map(async (file) => {
         const fileName = `${folder}/${Date.now()}_${file.originalname}`;
         const fileRef = bucket.file(fileName);
