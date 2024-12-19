@@ -33,6 +33,10 @@ export class HandleEventsStripe {
     const signature = request.headers['stripe-signature'];
     const endpointSecret = this.configService.get('WHSEC_STRIPE')!;
 
+    if (!request.rawBody) {
+      throw new Error('Webhook payload is missing or empty');
+    }
+
     return this.stripe.webhooks.constructEvent(
       request.rawBody,
       signature,
@@ -45,15 +49,16 @@ export class HandleEventsStripe {
 
     const metadata = session.metadata as unknown as Metadata;
 
+    const email = new Email(session.customer_details!.email!);
     const request: CreateSendEmailRequest = {
-      email: new Email(session.customer_email!),
+      email: email.value,
       inviteType: metadata.invite_type,
       clientName: session.customer_details!.name!,
       inviteId: metadata.id,
     };
 
     const invite: InviteProps = {
-      email: new Email(session.customer_email!),
+      email: email,
       date: metadata.date,
       duration_invite: InvitePlanDetails.getDate(
         metadata.invite_plan as InvitePlan,
@@ -67,7 +72,7 @@ export class HandleEventsStripe {
       invite_type: metadata.invite_type as InviteType,
     };
 
-    this.eventEmmiter.emit('invite.created', invite); // a
+    this.eventEmmiter.emit('invite.created', invite);
 
     return await this.mailRepository.sendEmail(request);
   }
