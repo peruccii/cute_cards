@@ -22,7 +22,7 @@ export class Resendmail implements MailRepository {
   ): Promise<CreateEmailResponse> {
     const response = await this.resend.emails.send({
       from: 'Acme <onboarding@resend.dev>',
-      to: [request.email.value],
+      to: [request.email],
       subject: 'hello world',
       html: checkInviteTypeAndReturnHtml(request),
     });

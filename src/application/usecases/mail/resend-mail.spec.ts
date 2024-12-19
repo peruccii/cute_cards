@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Resendmail } from './resend-mail.service';
 import { ConfigService } from '@nestjs/config';
-import { Email } from '@application/entities/fieldsValidations/email';
 import * as dotenv from 'dotenv';
 import { ResendSendMailError } from '../errors/resend-send-email-error';
 import { CreateSendEmailRequest } from '@application/repositories/mail-repository';
@@ -35,7 +34,7 @@ describe('RESEND MAIL TEST', () => {
 
   it('should be able to resend send email', async () => {
     const request: CreateSendEmailRequest = {
-      email: new Email('delivered@resend.dev'),
+      email: 'delivered@resend.dev',
       clientName: 'teste',
       inviteId: randomUUID(),
       inviteType: InviteType.LOVE,

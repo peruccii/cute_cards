@@ -10,7 +10,7 @@ import { PrepareInviteCheckoutBody } from '../dtos/prepare-invite-checkout-body'
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
 
-@Controller('invites')
+@Controller()
 export class InviteController {
   constructor(
     private readonly prepareInviteCheckout: PrepareInviteCheckout,

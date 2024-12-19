@@ -1,11 +1,9 @@
-import { Email } from '@application/entities/fieldsValidations/email';
-
 export interface CreateEmailResponse {
   id: string;
 }
 
 export interface CreateSendEmailRequest {
-  email: Email;
+  email: string;
   inviteType: string;
   inviteId: string;
   clientName: string;
