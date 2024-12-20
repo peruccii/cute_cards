@@ -6,7 +6,7 @@ import { CheckoutRepository } from '@application/repositories/checkout-repositor
 import { InviteRepository } from '@application/repositories/invite-repository';
 import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite-mappers';
 import { Injectable } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
 export interface PrepareInviteCheckoutRequest {
   title: string;
@@ -30,6 +30,7 @@ export class PrepareInviteCheckout {
   constructor(
     private checkoutRepository: CheckoutRepository,
     private readonly inviteRepository: InviteRepository,
+    private eventEmmiter: EventEmitter2,
   ) {}
 
   async execute(
@@ -38,6 +39,10 @@ export class PrepareInviteCheckout {
     const { imageUrls } = request;
 
     const invite = makeInvite({ ...request, imageUrls: imageUrls });
+
+    this.eventEmmiter
+      .waitFor('data-invite.created')
+      .then(() => this.eventEmmiter.emit('imagesUrl.created', imageUrls));
 
     invite.verifyQuantityOfPhothosByInvitePlan(invite.invite_plan, imageUrls);
 
@@ -55,7 +60,6 @@ export class PrepareInviteCheckout {
 
   @OnEvent('invite.created')
   async createInvite(data: Invite) {
-    console.log('on event arrived here!');
     await this.inviteRepository.create(data);
   }
 }
