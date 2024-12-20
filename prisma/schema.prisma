@@ -2,36 +2,37 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 enum InviteType {
-    LOVE
-    BESTFRIENDS
-    BIRTHDAY
+  LOVE
+  BESTFRIENDS
+  BIRTHDAY
 }
 
 enum InvitePlan {
-    BASIC
-    PREMIUM
+  BASIC
+  PREMIUM
 }
 
 model Invite {
-    id          String     @id
-    date        DateTime
-    url_music   String
-    email       String
-    title       String
-    sub_title   String
-    message     String
-    imageUrls   String
-    invite_type InviteType
-    invite_plan InvitePlan
+  id              String     @id
+  date            DateTime
+  url_music       String?
+  email           String
+  title           String
+  sub_title       String
+  duration_invite DateTime
+  message         String
+  imageUrls       Json
+  invite_type     InviteType
+  invite_plan     InvitePlan
 
-    @@index([email])
+  @@index([email])
 }

@@ -50,7 +50,7 @@ export class Invite {
     return this.props.date;
   }
 
-  public set url_music(url_music: UrlMusic) {
+  public set url_music(url_music: UrlMusic | null) {
     this.props.url_music = url_music;
   }
 

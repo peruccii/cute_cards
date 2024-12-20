@@ -1,7 +1,7 @@
-import { Invite } from '@application/entities/invite';
+import CheckoutRequest from '@application/interfaces/checkout';
 
 export abstract class CheckoutRepository {
   abstract createCheckoutSession(
-    invite: Partial<Invite>,
+    invite: CheckoutRequest,
   ): Promise<string | null>;
 }

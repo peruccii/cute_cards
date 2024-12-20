@@ -3,10 +3,10 @@ import { CreateInviteCheckoutSession } from './create-checkout';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite-mappers';
-import { Invite } from '@application/entities/invite';
 import { HandleEventsStripe } from './handle-events-stripe';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MailRepository } from '@application/repositories/mail-repository';
+import CheckoutRequest from '@application/interfaces/checkout';
 
 describe('CHECKOUT TEST', () => {
   let inviteCheckout: CreateInviteCheckoutSession;
@@ -50,11 +50,11 @@ describe('CHECKOUT TEST', () => {
 
     invite.verifyQuantityOfPhothosByInvitePlan(
       invite.invite_plan,
-      prismaInvite.imageUrls!,
+      prismaInvite.imageUrls,
     );
 
     const url_checkout = await inviteCheckout.createCheckoutSession(
-      prismaInvite as unknown as Invite,
+      prismaInvite as unknown as CheckoutRequest,
     );
 
     expect(url_checkout).toContain('checkout.stripe.com');
