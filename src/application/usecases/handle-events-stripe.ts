@@ -1,7 +1,4 @@
-import { InvitePlan } from '@application/entities/enums/invitePlan';
-import { InviteType } from '@application/entities/enums/inviteType';
 import { Email } from '@application/entities/fieldsValidations/email';
-import { InviteProps } from '@application/entities/invite';
 import { InvitePlanDetails } from '@application/entities/invite-plan-details';
 import {
   CreateSendEmailRequest,
@@ -12,6 +9,11 @@ import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import Stripe from 'stripe';
 import { Metadata } from './create-checkout';
+import PrismaCreateInviteRequest from '@application/interfaces/event';
+import { Message } from '@application/entities/fieldsValidations/message';
+import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
+import { UrlMusic } from '@application/entities/fieldsValidations/url_music';
+import { Title } from '@application/entities/fieldsValidations/title';
 
 @Injectable()
 export class HandleEventsStripe {
@@ -50,6 +52,7 @@ export class HandleEventsStripe {
     const metadata = session.metadata as unknown as Metadata;
 
     const email = new Email(session.customer_details!.email!);
+
     const request: CreateSendEmailRequest = {
       email: email.value,
       inviteType: metadata.invite_type,
@@ -57,19 +60,23 @@ export class HandleEventsStripe {
       inviteId: metadata.id,
     };
 
-    const invite: InviteProps = {
+    const durationInviteDate = InvitePlanDetails.getDate(metadata.invite_plan);
+
+    const url_music = metadata.url_music
+      ? new UrlMusic(metadata.url_music)
+      : null;
+
+    const invite: PrismaCreateInviteRequest = {
+      id: metadata.id,
       email: email,
       date: metadata.date,
-      duration_invite: InvitePlanDetails.getDate(
-        metadata.invite_plan as InvitePlan,
-      ),
-      title: metadata.title,
-      imageUrls: [],
-      invite_plan: metadata.invite_plan as InvitePlan,
-      message: metadata.message,
-      sub_title: metadata.sub_title,
-      url_music: metadata.url_music ? metadata.url_music : null,
-      invite_type: metadata.invite_type as InviteType,
+      duration_invite: durationInviteDate,
+      title: new Title(metadata.title),
+      invite_plan: metadata.invite_plan,
+      message: new Message(metadata.message),
+      sub_title: new SubTitle(metadata.sub_title),
+      url_music: url_music,
+      invite_type: metadata.invite_type,
     };
 
     this.eventEmmiter.emit('invite.created', invite);
