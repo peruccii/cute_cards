@@ -40,10 +40,6 @@ export class PrepareInviteCheckout {
 
     const invite = makeInvite({ ...request, imageUrls: imageUrls });
 
-    this.eventEmmiter
-      .waitFor('data-invite.created')
-      .then(() => this.eventEmmiter.emit('imagesUrl.created', imageUrls));
-
     invite.verifyQuantityOfPhothosByInvitePlan(invite.invite_plan, imageUrls);
 
     invite.varifyIfUserCanPutUrlMusic(invite.invite_plan);
@@ -58,7 +54,7 @@ export class PrepareInviteCheckout {
     return { url_checkout };
   }
 
-  @OnEvent('invite.created')
+  @OnEvent('invite.created', { async: true })
   async createInvite(data: Invite) {
     await this.inviteRepository.create(data);
   }
