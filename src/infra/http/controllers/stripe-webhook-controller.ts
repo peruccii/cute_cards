@@ -18,7 +18,7 @@ export class StripeWebhookController {
     }
 
     if (event.type === 'checkout.session.async_payment_failed') {
-      await this.stripeService.handleSessionPayamentFailed(event);
+      await this.stripeService.handleSessionPaymentFailed(event);
     }
 
     return { received: true };
