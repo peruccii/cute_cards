@@ -1,9 +1,9 @@
 import Stripe from 'stripe';
 import { CheckoutRepository } from '@application/repositories/checkout-repository';
 import { Injectable } from '@nestjs/common';
-import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { ConfigService } from '@nestjs/config';
-import CheckoutRequest from '@application/interfaces/checkout';
+import CheckoutRequest from '@application/interfaces/checkoutRequest';
+import { InvitePlanDetails } from '@application/entities/invite-plan-details';
 
 export interface Metadata extends CheckoutRequest {
   id: string;
@@ -28,9 +28,9 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
         inviteId: invite.id,
         invite_plan: invite.invite_plan,
         date: invite.date.toISOString(),
-        title: invite.title as unknown as string,
-        sub_title: String(invite.sub_title as unknown as string),
-        message: invite.message as unknown as string,
+        title: invite.title,
+        sub_title: invite.sub_title,
+        message: invite.message,
       },
     });
 
@@ -43,10 +43,10 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `${invite.invite_type} ${invite.invite_plan}`,
+              name: `Cartão ${invite.invite_type} ${invite.invite_plan}`,
               images: ['https://example.com/image.png'],
             },
-            unit_amount: invite.invite_plan === InvitePlan.BASIC ? 2000 : 3000,
+            unit_amount: InvitePlanDetails.getPrice(invite.invite_plan),
           },
           quantity: 1,
         },
@@ -58,9 +58,9 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
         inviteId: invite.id,
         invite_plan: invite.invite_plan,
         date: invite.date.toISOString(),
-        title: invite.title as unknown as string,
-        sub_title: String(invite.sub_title as unknown as string),
-        message: invite.message as unknown as string,
+        title: invite.title,
+        sub_title: invite.sub_title,
+        message: invite.message,
       },
       success_url: 'https://example.com/success',
       cancel_url: 'https://example.com/cancel',
