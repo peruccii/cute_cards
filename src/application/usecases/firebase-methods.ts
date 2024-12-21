@@ -40,4 +40,16 @@ export class Firebase implements FirebaseRepository {
     const bucket = admin.storage().bucket();
     bucket.file(emailUser).delete();
   }
+
+  async getImgUrls(emailUser: string): Promise<string[]> {
+    const bucket = admin.storage().bucket();
+
+    const [files] = await bucket.getFiles({ prefix: emailUser });
+
+    const urls = files.map((file) => {
+      return `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+    });
+
+    return urls;
+  }
 }
