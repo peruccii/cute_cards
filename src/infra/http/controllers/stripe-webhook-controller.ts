@@ -14,8 +14,13 @@ export class StripeWebhookController {
     }
 
     if (event.type === 'checkout.session.expired') {
-      await this.stripeService.handleSessionExpired();
+      await this.stripeService.handleSessionExpired(event);
     }
+
+    if (event.type === 'checkout.session.async_payment_failed') {
+      await this.stripeService.handleSessionPayamentFailed(event);
+    }
+
     return { received: true };
   }
 }
