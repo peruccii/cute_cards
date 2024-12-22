@@ -14,24 +14,20 @@ export class PrismaInviteRepository implements InviteRepository {
 
   async create(invite: Invite): Promise<void> {
     const raw = PrismaInviteMapper.toPrisma(invite);
-
-    const data = await this.prisma.invite.create({
-      data: { ...raw, imageUrls: [''] },
+    await this.prisma.invite.create({
+      data: raw,
     });
-
-    this.eventEmmiter.emit('data-invite.created');
-
-    this.eventEmmiter
-      .waitFor('imagesUrl.created')
-      .then((imageUrls: string[]) =>
-        this.uploadInvitePuttingImage(data.id, imageUrls),
-      );
   }
 
-  async uploadInvitePuttingImage(inviteId: string, urls: string[]) {
-    return await this.prisma.invite.update({
-      where: { id: inviteId },
-      data: { imageUrls: urls },
+  async delete(id: string) {
+    await this.prisma.invite.delete({ where: { id: id } });
+  }
+
+  async findMany(): Promise<Invite[]> {
+    const invites = await this.prisma.invite.findMany();
+
+    return invites.map((invite) => {
+      return PrismaInviteMapper.toDomain(invite);
     });
   }
 }
