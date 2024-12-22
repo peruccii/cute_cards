@@ -15,6 +15,7 @@ import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
 import { UrlMusic } from '@application/entities/fieldsValidations/url_music';
 import { Title } from '@application/entities/fieldsValidations/title';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
+import { InviteRepository } from '@application/repositories/invite-repository';
 
 @Injectable()
 export class HandleEventsStripe {
@@ -24,13 +25,12 @@ export class HandleEventsStripe {
     private configService: ConfigService,
     private mailRepository: MailRepository,
     private eventEmmiter: EventEmitter2,
-    private firebaseMethods: FirebaseRepository,
+    private firebaseRepository: FirebaseRepository,
+    private readonly inviteRepository: InviteRepository,
   ) {
     this.stripe = new Stripe(this.configService.get('STRIPE_API_KEY')!, {
       apiVersion: '2024-11-20.acacia',
     });
-    this.mailRepository = mailRepository;
-    this.eventEmmiter = eventEmmiter;
   }
 
   verifyEvent(request: any): Stripe.Event {
@@ -54,13 +54,15 @@ export class HandleEventsStripe {
 
     const metadata = session.metadata as unknown as Metadata;
 
-    const email = new Email(session.customer_details!.email!);
+    const email = new Email(metadata.email);
 
     const durationInviteDate = InvitePlanDetails.getDate(metadata.invite_plan);
 
     const url_music = metadata.url_music
       ? new UrlMusic(metadata.url_music)
       : null;
+
+    const imageUrls = await this.firebaseRepository.getImgUrls(email.value);
 
     const request: CreateSendEmailRequest = {
       email: email.value,
@@ -73,12 +75,13 @@ export class HandleEventsStripe {
       id: metadata.id,
       email: email,
       date: metadata.date,
-      duration_invite: durationInviteDate,
+      expirationDate: durationInviteDate,
       title: new Title(metadata.title),
       invite_plan: metadata.invite_plan,
       message: new Message(metadata.message),
       sub_title: new SubTitle(metadata.sub_title),
       url_music: url_music,
+      imageUrls: imageUrls,
       invite_type: metadata.invite_type,
     };
 
@@ -89,6 +92,19 @@ export class HandleEventsStripe {
 
   async handleSessionExpired(event: Stripe.Event) {
     const session = event.data.object as Stripe.Checkout.Session;
-    this.firebaseMethods.delete(session.customer_details!.email!);
+
+    if (session.customer_details && session.customer_details.email)
+      this.firebaseRepository.delete(session.customer_details.email);
+
+    if (session.metadata) this.inviteRepository.delete(session.metadata.id);
+  }
+
+  async handleSessionPaymentFailed(event: Stripe.Event) {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    if (session.customer_details && session.customer_details.email)
+      this.firebaseRepository.delete(session.customer_details.email);
+
+    if (session.metadata) this.inviteRepository.delete(session.metadata.id);
   }
 }
