@@ -93,18 +93,22 @@ export class HandleEventsStripe {
   async handleSessionExpired(event: Stripe.Event) {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    if (session.customer_details && session.customer_details.email)
-      this.firebaseRepository.delete(session.customer_details.email);
+    const metadata = session.metadata as unknown as Metadata;
 
-    if (session.metadata) this.inviteRepository.delete(session.metadata.id);
+    if (metadata && metadata.email)
+      this.firebaseRepository.delete(metadata.email);
+
+    if (metadata) this.inviteRepository.delete(metadata.id);
   }
 
   async handleSessionPaymentFailed(event: Stripe.Event) {
     const session = event.data.object as Stripe.Checkout.Session;
 
-    if (session.customer_details && session.customer_details.email)
-      this.firebaseRepository.delete(session.customer_details.email);
+    const metadata = session.metadata as unknown as Metadata;
 
-    if (session.metadata) this.inviteRepository.delete(session.metadata.id);
+    if (metadata && metadata.email)
+      this.firebaseRepository.delete(metadata.email);
+
+    if (metadata) this.inviteRepository.delete(metadata.id);
   }
 }
