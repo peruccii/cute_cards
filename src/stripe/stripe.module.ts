@@ -4,6 +4,8 @@ import { StripeWebhookController } from '@infra/http/controllers/stripe-webhook-
 import { HandleEventsStripe } from '@application/usecases/handle-events-stripe';
 import { MailRepository } from '@application/repositories/mail-repository';
 import { Resendmail } from '@application/usecases/mail/resend-mail.service';
+import { FirebaseRepository } from '@application/repositories/firebase-repository';
+import { Firebase } from '@application/usecases/firebase-methods';
 const STRIPE_API_KEY = 'STRIPE_API_KEY';
 
 @Module({
@@ -26,6 +28,10 @@ export class StripeModule {
         {
           provide: MailRepository,
           useClass: Resendmail, // Forneça a implementação concreta aqui
+        },
+        {
+          provide: FirebaseRepository,
+          useClass: Firebase, // Forneça a implementação concreta aqui
         },
       ],
     };

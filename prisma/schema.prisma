@@ -22,17 +22,18 @@ enum InvitePlan {
 }
 
 model Invite {
-  id              String     @id
-  date            DateTime
-  url_music       String?
-  email           String
-  title           String
-  sub_title       String
-  duration_invite DateTime
-  message         String
-  imageUrls       Json
-  invite_type     InviteType
-  invite_plan     InvitePlan
+  id             String     @id
+  date           DateTime
+  url_music      String?
+  email          String
+  title          String
+  sub_title      String
+  expirationDate DateTime
+  message        String
+  imageUrls      Json
+  invite_type    InviteType
+  invite_plan    InvitePlan
+  createdAt      DateTime
 
   @@index([email])
 }

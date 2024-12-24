@@ -5,4 +5,6 @@ export abstract class FirebaseRepository {
   ): Promise<string[]>; // custom promise
 
   abstract delete(emailUser: string);
+
+  abstract getImgUrls(emailUser: string): Promise<string[]>;
 }

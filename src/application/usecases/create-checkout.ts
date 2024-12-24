@@ -56,6 +56,7 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
         url_music: invite.url_music || null,
         invite_type: invite.invite_type,
         inviteId: invite.id,
+        email: invite.email,
         invite_plan: invite.invite_plan,
         date: invite.date.toISOString(),
         title: invite.title,

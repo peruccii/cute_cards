@@ -14,7 +14,7 @@ export interface PrepareInviteCheckoutRequest {
   message: string;
   email: string;
   date: Date;
-  duration_invite: Date;
+  expirationDate: Date;
   url_music: string | null;
   imageUrls: string[];
   invite_type: InviteType;

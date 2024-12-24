@@ -7,6 +7,7 @@ import { SubTitle } from './fieldsValidations/subTitle';
 import { Title } from './fieldsValidations/title';
 import { UrlMusic } from './fieldsValidations/url_music';
 import { PhotoLimitExceeded } from '@application/usecases/errors/photo-limit-exceeded';
+import { Replace } from '@application/helpers/replace';
 
 export interface InviteProps {
   date: Date;
@@ -18,16 +19,20 @@ export interface InviteProps {
   imageUrls: string[];
   invite_type: InviteType;
   invite_plan: InvitePlan;
-  duration_invite: Date;
+  expirationDate: Date;
+  createdAt: Date;
 }
 
 export class Invite {
   private props: InviteProps;
   private _id: string;
 
-  constructor(props: InviteProps, id?: string) {
+  constructor(props: Replace<InviteProps, { createdAt?: Date }>, id?: string) {
     this._id = id ?? randomUUID();
-    this.props = props;
+    this.props = {
+      ...props,
+      createdAt: props.createdAt ?? new Date(),
+    };
   }
 
   public get id(): string {
@@ -38,12 +43,12 @@ export class Invite {
     this.props.date = date;
   }
 
-  public get duration_invite(): Date {
-    return this.props.duration_invite;
+  public get expirationDate(): Date {
+    return this.props.expirationDate;
   }
 
-  public set duration_invite(duration_invite: Date) {
-    this.props.duration_invite = duration_invite;
+  public set expirationDate(expirationDate: Date) {
+    this.props.expirationDate = expirationDate;
   }
 
   public get date(): Date {
@@ -114,6 +119,10 @@ export class Invite {
     return this.props.invite_plan;
   }
 
+  public get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
   public varifyIfUserCanPutUrlMusic(invitePlan: InvitePlan) {
     if (invitePlan != InvitePlan.PREMIUM)
       throw new Error(`Type ${invitePlan} cannot select music.`);
@@ -123,7 +132,6 @@ export class Invite {
     plan: InvitePlan,
     images: string[],
   ) {
-    console.log(images);
     switch (plan) {
       case InvitePlan.BASIC:
         console.log(images);

@@ -17,7 +17,7 @@ export function makeInvite(override: Override) {
     email: new Email(override.email),
     invite_plan: override.invite_plan,
     invite_type: override.invite_type,
-    duration_invite: InvitePlanDetails.getDate(override.invite_plan),
+    expirationDate: InvitePlanDetails.getDate(override.invite_plan),
     url_music:
       override.url_music && override.url_music.length > 0
         ? new UrlMusic(override.url_music)

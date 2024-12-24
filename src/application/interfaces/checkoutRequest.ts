@@ -12,5 +12,5 @@ export default interface CheckoutRequest {
   message: string;
   url_music: string | null;
   date: Date;
-  duration_invite: Date;
+  expirationDate: Date;
 }

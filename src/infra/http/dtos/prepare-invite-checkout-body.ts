@@ -27,5 +27,5 @@ export class PrepareInviteCheckoutBody {
   @IsNotEmpty()
   invite_plan: InvitePlan;
   @IsNotEmpty()
-  duration_invite: Date;
+  expirationDate: Date;
 }

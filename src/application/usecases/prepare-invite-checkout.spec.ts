@@ -6,13 +6,26 @@ import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite
 import { HandleEventsStripe } from './handle-events-stripe';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { MailRepository } from '@application/repositories/mail-repository';
-import CheckoutRequest from '@application/interfaces/checkout';
+import CheckoutRequest from '@application/interfaces/checkoutRequest';
+import { FirebaseRepository } from '@application/repositories/firebase-repository';
+import { InviteRepository } from '@application/repositories/invite-repository';
 
 describe('CHECKOUT TEST', () => {
   let inviteCheckout: CreateInviteCheckoutSession;
 
   const mailRepositoryMock = {
     sendEmail: jest.fn().mockResolvedValue({ id: 'test-id' }),
+  };
+
+  const firebaseRepositoryMock = {
+    delete: jest.fn(),
+    uploadImages: jest.fn().mockResolvedValue(['']),
+  };
+
+  const inviteRepository = {
+    create: jest.fn(),
+    delete: jest.fn(),
+    findMany: jest.fn().mockResolvedValue(['']),
   };
 
   beforeEach(async () => {
@@ -34,6 +47,14 @@ describe('CHECKOUT TEST', () => {
         {
           provide: MailRepository,
           useValue: mailRepositoryMock,
+        },
+        {
+          provide: FirebaseRepository,
+          useValue: firebaseRepositoryMock,
+        },
+        {
+          provide: InviteRepository,
+          useValue: inviteRepository,
         },
       ],
     }).compile();

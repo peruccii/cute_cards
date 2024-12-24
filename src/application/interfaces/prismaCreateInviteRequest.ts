@@ -14,7 +14,8 @@ export default interface PrismaCreateInviteRequest {
   title: Title;
   sub_title: SubTitle;
   message: Message;
+  imageUrls: string[];
   url_music: UrlMusic | null;
   date: Date;
-  duration_invite: Date;
+  expirationDate: Date;
 }

@@ -1,4 +1,4 @@
-import CheckoutRequest from '@application/interfaces/checkout';
+import CheckoutRequest from '@application/interfaces/checkoutRequest';
 
 export abstract class CheckoutRepository {
   abstract createCheckoutSession(
