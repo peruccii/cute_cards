@@ -17,11 +17,11 @@ export function checkInviteTypeAndReturnHtml({
     }
 
     case InviteType.BIRTHDAY: {
-      return invite_type_constants.getLoveContent(qrCodeUrl, clientName);
+      return invite_type_constants.getBirthdayContent(qrCodeUrl, clientName);
     }
 
     case InviteType.BESTFRIENDS: {
-      return invite_type_constants.getLoveContent(qrCodeUrl, clientName);
+      return invite_type_constants.getBestFriendsContent(qrCodeUrl, clientName);
     }
 
     default: {
