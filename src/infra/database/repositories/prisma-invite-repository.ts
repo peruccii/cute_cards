@@ -3,14 +3,10 @@ import { InviteRepository } from '@application/repositories/invite-repository';
 import { PrismaService } from '../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { PrismaInviteMapper } from '../prisma/mappers/prisma-invite-mappers';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class PrismaInviteRepository implements InviteRepository {
-  constructor(
-    private prisma: PrismaService,
-    private eventEmmiter: EventEmitter2,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   async create(invite: Invite): Promise<void> {
     const raw = PrismaInviteMapper.toPrisma(invite);
