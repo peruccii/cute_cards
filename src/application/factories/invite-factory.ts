@@ -16,6 +16,9 @@ export function makeInvite(override: Override) {
     title: new Title(override.title),
     email: new Email(override.email),
     invite_plan: override.invite_plan,
+    card_color: override.card_color,
+    names: override.names,
+    payment_method: override.payment_method,
     invite_type: override.invite_type,
     expirationDate: InvitePlanDetails.getDate(override.invite_plan),
     url_music:

@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import CheckoutRequest from '@application/interfaces/checkoutRequest';
 import { InvitePlanDetails } from '@application/entities/invite-plan-details';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
 
 export interface Metadata extends CheckoutRequest {
   id: string;
@@ -27,8 +28,11 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
         invite_type: invite.invite_type,
         inviteId: invite.id,
         invite_plan: invite.invite_plan,
+        card_color: invite.card_color,
         date: invite.date.toISOString(),
+        names: invite.names,
         title: invite.title,
+        payment_method: PaymentMethod.STRIPE,
         sub_title: invite.sub_title,
         message: invite.message,
       },
@@ -57,13 +61,16 @@ export class CreateInviteCheckoutSession implements CheckoutRepository {
         invite_type: invite.invite_type,
         inviteId: invite.id,
         email: invite.email,
+        card_color: invite.card_color,
         invite_plan: invite.invite_plan,
+        payment_method: PaymentMethod.STRIPE,
         date: invite.date.toISOString(),
         title: invite.title,
+        names: invite.names,
         sub_title: invite.sub_title,
         message: invite.message,
       },
-      success_url: 'https://example.com/success',
+      success_url: `http://localhost:3000/app/page/success_payment-page.tsx/${customer.email}`,
       cancel_url: 'https://example.com/cancel',
     });
 

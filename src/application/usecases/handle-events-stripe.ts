@@ -16,6 +16,7 @@ import { UrlMusic } from '@application/entities/fieldsValidations/url_music';
 import { Title } from '@application/entities/fieldsValidations/title';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
 import { InviteRepository } from '@application/repositories/invite-repository';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
 
 @Injectable()
 export class HandleEventsStripe {
@@ -78,6 +79,9 @@ export class HandleEventsStripe {
       expirationDate: durationInviteDate,
       title: new Title(metadata.title),
       invite_plan: metadata.invite_plan,
+      card_color: metadata.card_color,
+      payment_method: PaymentMethod.STRIPE,
+      names: metadata.names,
       message: new Message(metadata.message),
       sub_title: new SubTitle(metadata.sub_title),
       url_music: url_music,

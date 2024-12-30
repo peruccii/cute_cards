@@ -28,4 +28,8 @@ export class PrepareInviteCheckoutBody {
   invite_plan: InvitePlan;
   @IsNotEmpty()
   expirationDate: Date;
+  @IsNotEmpty()
+  card_color: string;
+  @IsNotEmpty()
+  names: string;
 }

@@ -1,5 +1,6 @@
 import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { InviteType } from '@application/entities/enums/inviteType';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
 import { Email } from '@application/entities/fieldsValidations/email';
 import { Message } from '@application/entities/fieldsValidations/message';
 import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
@@ -25,7 +26,10 @@ export class PrismaInviteMapper {
       email: invite.email.value,
       invite_plan: invite.invite_plan,
       invite_type: invite.invite_type,
+      card_color: invite.card_color,
+      names: invite.names,
       title: invite.title.value,
+      payment_method: invite.payment_method,
       sub_title: invite.sub_title.value,
       imageUrls: invite.imageUrls,
       message: invite.message.value,
@@ -48,6 +52,9 @@ export class PrismaInviteMapper {
         invite_plan: raw.invite_plan as InvitePlan,
         invite_type: raw.invite_type as InviteType,
         title: new Title(raw.title),
+        card_color: raw.card_color,
+        names: raw.names,
+        payment_method: raw.payment_method as PaymentMethod,
         sub_title: new SubTitle(raw.sub_title),
         imageUrls: convertJsonValueToStringArray(raw.imageUrls),
         message: new Message(raw.message),

@@ -8,6 +8,7 @@ import { Title } from './fieldsValidations/title';
 import { UrlMusic } from './fieldsValidations/url_music';
 import { PhotoLimitExceeded } from '@application/usecases/errors/photo-limit-exceeded';
 import { Replace } from '@application/helpers/replace';
+import { PaymentMethod } from './enums/paymentMethod';
 
 export interface InviteProps {
   date: Date;
@@ -19,7 +20,10 @@ export interface InviteProps {
   imageUrls: string[];
   invite_type: InviteType;
   invite_plan: InvitePlan;
+  names: string;
+  payment_method: PaymentMethod;
   expirationDate: Date;
+  card_color: string;
   createdAt: Date;
 }
 
@@ -71,6 +75,14 @@ export class Invite {
     return this.props.email;
   }
 
+  public set payment_method(payment_method: PaymentMethod) {
+    this.props.payment_method = payment_method;
+  }
+
+  public get payment_method(): PaymentMethod {
+    return this.props.payment_method;
+  }
+
   public set title(title: Title) {
     this.props.title = title;
   }
@@ -93,6 +105,22 @@ export class Invite {
 
   public get message(): Message {
     return this.props.message;
+  }
+
+  public set card_color(card_color: string) {
+    this.props.card_color = card_color;
+  }
+
+  public get card_color(): string {
+    return this.props.card_color;
+  }
+
+  public set names(names: string) {
+    this.props.names = names;
+  }
+
+  public get names(): string {
+    return this.props.names;
   }
 
   public set imageUrls(imageUrls: string[]) {

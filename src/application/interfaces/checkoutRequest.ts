@@ -10,6 +10,8 @@ export default interface CheckoutRequest {
   sub_title: string;
   imageUrls: string[];
   message: string;
+  card_color: string;
+  names: string;
   url_music: string | null;
   date: Date;
   expirationDate: Date;

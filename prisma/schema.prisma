@@ -21,16 +21,24 @@ enum InvitePlan {
   PREMIUM
 }
 
+enum MethodPayment {
+  PIX
+  STRIPE
+}
+
 model Invite {
-  id             String     @id
+  id             String        @id
   date           DateTime
   url_music      String?
   email          String
   title          String
+  payment_method MethodPayment
   sub_title      String
   expirationDate DateTime
   message        String
   imageUrls      Json
+  names          String
+  card_color     String
   invite_type    InviteType
   invite_plan    InvitePlan
   createdAt      DateTime
