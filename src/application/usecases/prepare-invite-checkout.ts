@@ -5,8 +5,10 @@ import { makeInvite } from '@application/factories/invite-factory';
 import { CheckoutRepository } from '@application/repositories/checkout-repository';
 import { InviteRepository } from '@application/repositories/invite-repository';
 import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite-mappers';
+import { OnEvent } from '@nestjs/event-emitter';
+import { MercadoPagoRepository } from '@application/repositories/mercado-pago-repository';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 
 export interface PrepareInviteCheckoutRequest {
   title: string;
@@ -16,8 +18,11 @@ export interface PrepareInviteCheckoutRequest {
   date: Date;
   expirationDate: Date;
   url_music: string | null;
+  payment_method: PaymentMethod;
   imageUrls: string[];
+  names: string;
   invite_type: InviteType;
+  card_color: string;
   invite_plan: InvitePlan;
 }
 
@@ -30,7 +35,7 @@ export class PrepareInviteCheckout {
   constructor(
     private checkoutRepository: CheckoutRepository,
     private readonly inviteRepository: InviteRepository,
-    private eventEmmiter: EventEmitter2,
+    private readonly mercadopagoRepository: MercadoPagoRepository,
   ) {}
 
   async execute(
@@ -45,6 +50,13 @@ export class PrepareInviteCheckout {
     invite.varifyIfUserCanPutUrlMusic(invite.invite_plan);
 
     const prismaInvite = PrismaInviteMapper.toPrisma(invite);
+
+    if (invite.payment_method === PaymentMethod.PIX) {
+      return this.mercadopagoRepository.create(
+        prismaInvite.invite_plan,
+        prismaInvite.email,
+      );
+    }
 
     const url_checkout =
       await this.checkoutRepository.createCheckoutSession(prismaInvite);
