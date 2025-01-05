@@ -7,6 +7,15 @@ import { PrismaInviteMapper } from '../prisma/mappers/prisma-invite-mappers';
 @Injectable()
 export class PrismaInviteRepository implements InviteRepository {
   constructor(private prisma: PrismaService) {}
+  async find(id: string): Promise<Invite | null> {
+    const invite = await this.prisma.invite.findFirst({
+      where: { id: id },
+    });
+
+    if (!invite) return null;
+
+    return PrismaInviteMapper.toDomain(invite);
+  }
 
   async create(invite: Invite): Promise<void> {
     const raw = PrismaInviteMapper.toPrisma(invite);

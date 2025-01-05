@@ -71,7 +71,7 @@ describe('CHECKOUT TEST', () => {
 
     invite.verifyQuantityOfPhothosByInvitePlan(
       invite.invite_plan,
-      prismaInvite.imageUrls,
+      prismaInvite.image_urls,
     );
 
     const url_checkout = await inviteCheckout.createCheckoutSession(

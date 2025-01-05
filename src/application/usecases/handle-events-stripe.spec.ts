@@ -11,6 +11,7 @@ import { Title } from '@application/entities/fieldsValidations/title';
 import { Message } from '@application/entities/fieldsValidations/message';
 import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
 import { InviteRepository } from '@application/repositories/invite-repository';
+import { MercadoPagoRepository } from '@application/repositories/mercado-pago-repository';
 
 describe('HANDLE EVENTS STRIPE TEST', () => {
   let handle_events: HandleEventsStripe;
@@ -33,6 +34,10 @@ describe('HANDLE EVENTS STRIPE TEST', () => {
     findMany: jest.fn().mockResolvedValue(['']),
   };
 
+  const mercadoPagoRepository = {
+    create: jest.fn(),
+  };
+
   beforeEach(async () => {
     dotenv.config();
     const module: TestingModule = await Test.createTestingModule({
@@ -50,6 +55,10 @@ describe('HANDLE EVENTS STRIPE TEST', () => {
         {
           provide: InviteRepository, // providando o repository real para o repository falso ( mailRepositoryMock )
           useValue: inviteRepository, // repository falso
+        },
+        {
+          provide: MercadoPagoRepository, // providando o repository real para o repository falso ( mailRepositoryMock )
+          useValue: mercadoPagoRepository, // repository falso
         },
         {
           provide: ConfigService,

@@ -16,12 +16,12 @@ describe('INVITE TEST', () => {
   });
 
   it('should not be able to create invite with more photos than invite plan BASIC require', async () => {
-    const invite = makeInvite({ imageUrls: new Array(8).fill('') });
+    const invite = makeInvite({ image_urls: new Array(8).fill('') });
 
     expect(() => {
       invite.verifyQuantityOfPhothosByInvitePlan(
         invite.invite_plan,
-        invite.imageUrls,
+        invite.image_urls,
       );
     }).toThrow(PhotoLimitExceeded);
   });
@@ -29,13 +29,13 @@ describe('INVITE TEST', () => {
   it('should not be able to create invite with more photos than invite plan PREMIUM require', async () => {
     const invite = makeInvite({
       invite_plan: InvitePlan.PREMIUM,
-      imageUrls: new Array(8).fill(''),
+      image_urls: new Array(8).fill(''),
     });
 
     expect(() => {
       invite.verifyQuantityOfPhothosByInvitePlan(
         invite.invite_plan,
-        invite.imageUrls,
+        invite.image_urls,
       );
     }).toThrow(PhotoLimitExceeded);
   });
@@ -47,7 +47,10 @@ describe('INVITE TEST', () => {
     });
 
     expect(() => {
-      invite.varifyIfUserCanPutUrlMusic(invite.invite_plan);
+      invite.varifyIfUserCanPutUrlMusic(
+        invite.invite_plan,
+        invite.url_music?.value,
+      );
     }).toThrow(Error);
   });
 });

@@ -15,10 +15,12 @@ export default interface PrismaCreateInviteRequest {
   title: Title;
   sub_title: SubTitle;
   message: Message;
-  imageUrls: string[];
+  image_urls: string[];
   payment_method: PaymentMethod;
   card_color: string;
+  bg_color: string;
   names: string;
+  createdAt: Date;
   url_music: UrlMusic | null;
   date: Date;
   expirationDate: Date;

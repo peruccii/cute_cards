@@ -21,17 +21,17 @@ function convertJsonValueToStringArray(value: JsonValue): string[] {
 export class PrismaInviteMapper {
   static toPrisma(invite: Invite) {
     return {
-      ...invite,
       id: invite.id,
       email: invite.email.value,
       invite_plan: invite.invite_plan,
       invite_type: invite.invite_type,
       card_color: invite.card_color,
+      bg_color: invite.bg_color,
       names: invite.names,
       title: invite.title.value,
       payment_method: invite.payment_method,
       sub_title: invite.sub_title.value,
-      imageUrls: invite.imageUrls,
+      image_urls: invite.image_urls,
       message: invite.message.value,
       url_music:
         invite.url_music &&
@@ -53,10 +53,11 @@ export class PrismaInviteMapper {
         invite_type: raw.invite_type as InviteType,
         title: new Title(raw.title),
         card_color: raw.card_color,
+        bg_color: raw.bg_color,
         names: raw.names,
         payment_method: raw.payment_method as PaymentMethod,
         sub_title: new SubTitle(raw.sub_title),
-        imageUrls: convertJsonValueToStringArray(raw.imageUrls),
+        image_urls: convertJsonValueToStringArray(raw.image_urls),
         message: new Message(raw.message),
         url_music:
           raw.url_music && raw.url_music ? new UrlMusic(raw.url_music) : null,

@@ -8,8 +8,7 @@ export class UrlMusic {
   }
 
   private validateUrlMusic(url_music: string): boolean {
-    const urlMusicRegex =
-      /^(https?:\/\/)(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[a-zA-Z0-9_-]{11}(\S*)?$/;
+    const urlMusicRegex = /^https:\/\/\S+$/;
     return urlMusicRegex.test(url_music);
   }
 

@@ -63,12 +63,11 @@ export class HandleEventsStripe {
       ? new UrlMusic(metadata.url_music)
       : null;
 
-    const imageUrls = await this.firebaseRepository.getImgUrls(email.value);
+    const image_urls = await this.firebaseRepository.getImgUrls(email.value);
 
     const request: CreateSendEmailRequest = {
       email: email.value,
       inviteType: metadata.invite_type,
-      clientName: session.customer_details!.name!,
       inviteId: metadata.id,
     };
 
@@ -80,12 +79,14 @@ export class HandleEventsStripe {
       title: new Title(metadata.title),
       invite_plan: metadata.invite_plan,
       card_color: metadata.card_color,
+      bg_color: metadata.bg_color,
       payment_method: PaymentMethod.STRIPE,
       names: metadata.names,
       message: new Message(metadata.message),
       sub_title: new SubTitle(metadata.sub_title),
       url_music: url_music,
-      imageUrls: imageUrls,
+      image_urls: image_urls,
+      createdAt: new Date(),
       invite_type: metadata.invite_type,
     };
 

@@ -35,7 +35,6 @@ describe('RESEND MAIL TEST', () => {
   it('should be able to resend send email', async () => {
     const request: CreateSendEmailRequest = {
       email: 'delivered@resend.dev',
-      clientName: 'teste',
       inviteId: randomUUID(),
       inviteType: InviteType.LOVE,
     };

@@ -26,6 +26,11 @@ enum MethodPayment {
   STRIPE
 }
 
+enum PaymentStatus {
+  pending
+  accredited
+}
+
 model Invite {
   id             String        @id
   date           DateTime
@@ -35,13 +40,21 @@ model Invite {
   payment_method MethodPayment
   sub_title      String
   expirationDate DateTime
-  message        String
-  imageUrls      Json
+  message        String        @db.Text
+  image_urls     Json
   names          String
   card_color     String
+  bg_color       String
   invite_type    InviteType
   invite_plan    InvitePlan
   createdAt      DateTime
 
   @@index([email])
+}
+
+model Payment {
+  id             String        @id
+  status_payment PaymentStatus
+  createdAt      DateTime
+  email_user     String
 }

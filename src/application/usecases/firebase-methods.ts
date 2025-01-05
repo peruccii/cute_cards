@@ -6,8 +6,7 @@ import * as admin from 'firebase-admin';
 @Injectable()
 export class Firebase implements FirebaseRepository {
   constructor(private configService: ConfigService) {
-    const serviceAccountPath =
-      '/home/prc/www/cute_cards/src/application/secrets/serviceAccountKey.json'; // TODO: move to env variable
+    const serviceAccountPath = this.configService.get('SERVICE_ACCOUNT_PATH');
     if (admin.apps.length === 0) {
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccountPath),

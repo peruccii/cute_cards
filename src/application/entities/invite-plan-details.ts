@@ -23,4 +23,12 @@ export class InvitePlanDetails {
         return 2000;
     }
   }
+  static getPricePix(plan: InvitePlan): number {
+    switch (plan) {
+      case InvitePlan.BASIC:
+        return 0.1;
+      case InvitePlan.PREMIUM:
+        return 0.1;
+    }
+  }
 }

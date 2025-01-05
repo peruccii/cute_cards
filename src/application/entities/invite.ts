@@ -17,13 +17,14 @@ export interface InviteProps {
   title: Title;
   sub_title: SubTitle;
   message: Message;
-  imageUrls: string[];
+  image_urls: string[];
   invite_type: InviteType;
   invite_plan: InvitePlan;
   names: string;
   payment_method: PaymentMethod;
   expirationDate: Date;
   card_color: string;
+  bg_color: string;
   createdAt: Date;
 }
 
@@ -115,6 +116,14 @@ export class Invite {
     return this.props.card_color;
   }
 
+  public set bg_color(bg_color: string) {
+    this.props.bg_color = bg_color;
+  }
+
+  public get bg_color(): string {
+    return this.props.bg_color;
+  }
+
   public set names(names: string) {
     this.props.names = names;
   }
@@ -123,12 +132,12 @@ export class Invite {
     return this.props.names;
   }
 
-  public set imageUrls(imageUrls: string[]) {
-    this.props.imageUrls = imageUrls;
+  public set image_urls(image_urls: string[]) {
+    this.props.image_urls = image_urls;
   }
 
-  public get imageUrls(): string[] {
-    return this.props.imageUrls;
+  public get image_urls(): string[] {
+    return this.props.image_urls;
   }
 
   public set invite_type(invite_type: InviteType) {
@@ -151,8 +160,11 @@ export class Invite {
     return this.props.createdAt;
   }
 
-  public varifyIfUserCanPutUrlMusic(invitePlan: InvitePlan) {
-    if (invitePlan != InvitePlan.PREMIUM)
+  public varifyIfUserCanPutUrlMusic(
+    invitePlan: InvitePlan,
+    url_music: string | null | undefined,
+  ) {
+    if (invitePlan != InvitePlan.PREMIUM && url_music != null)
       throw new Error(`Type ${invitePlan} cannot select music.`);
   }
 

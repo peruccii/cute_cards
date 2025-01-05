@@ -12,8 +12,14 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   dotenv.config();
 
+  app.enableCors({
+    origin: '*', // change to my own dominio
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
+
   app.useBodyParser('json', { limit: '20mb' });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 4000);
 }
 bootstrap();

@@ -6,6 +6,7 @@ import { MailRepository } from '@application/repositories/mail-repository';
 import { Resendmail } from '@application/usecases/mail/resend-mail.service';
 import { FirebaseRepository } from '@application/repositories/firebase-repository';
 import { Firebase } from '@application/usecases/firebase-methods';
+import { PrismaModule } from '@infra/database/prisma/prisma.module';
 const STRIPE_API_KEY = 'STRIPE_API_KEY';
 
 @Module({
@@ -16,7 +17,7 @@ export class StripeModule {
     return {
       module: StripeModule,
       controllers: [StripeWebhookController],
-      imports: [ConfigModule.forRoot()],
+      imports: [ConfigModule.forRoot(), PrismaModule],
       providers: [
         HandleEventsStripe,
         {
@@ -27,11 +28,11 @@ export class StripeModule {
         },
         {
           provide: MailRepository,
-          useClass: Resendmail, // Forneça a implementação concreta aqui
+          useClass: Resendmail,
         },
         {
           provide: FirebaseRepository,
-          useClass: Firebase, // Forneça a implementação concreta aqui
+          useClass: Firebase,
         },
       ],
     };

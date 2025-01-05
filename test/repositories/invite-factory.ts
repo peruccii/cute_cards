@@ -1,5 +1,6 @@
 import { InvitePlan } from '@application/entities/enums/invitePlan';
 import { InviteType } from '@application/entities/enums/inviteType';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
 import { Email } from '@application/entities/fieldsValidations/email';
 import { Message } from '@application/entities/fieldsValidations/message';
 import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
@@ -17,10 +18,15 @@ export function makeInvite(override: Override = {}) {
     email: new Email('email@example.com'),
     title: new Title('This is a title text'),
     invite_plan: InvitePlan.BASIC,
+    names: 'aa',
+    card_color: '#HD6S3S',
+    bg_color: '#HD6S3S',
+    payment_method: PaymentMethod.PIX,
+    createdAt: new Date(),
     expirationDate: InvitePlanDetails.getDate(InvitePlan.BASIC),
     url_music: new UrlMusic('https://www.youtube.com/watch?v=hTWKbfoikeg'),
     message: new Message('This is a message text.'),
-    imageUrls: [''],
+    image_urls: [''],
     invite_type: InviteType.LOVE,
     ...override,
   });

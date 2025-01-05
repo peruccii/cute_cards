@@ -4,4 +4,5 @@ export abstract class InviteRepository {
   abstract create(invite: Invite);
   abstract delete(id: string);
   abstract findMany(): Promise<Invite[]>;
+  abstract find(id: string): Promise<Invite | null>;
 }

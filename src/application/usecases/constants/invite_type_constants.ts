@@ -1,5 +1,5 @@
 export class InviteTypeConstants {
-  getLoveContent(qrCodeUrl: string, clientName: string) {
+  getLoveContent(qrCodeUrl: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -25,7 +25,7 @@ export class InviteTypeConstants {
                           <h1>Obrigado pelo seu carinho!</h1>
                       </div>
                       <div class="body">
-                          <h2>Olá ${clientName}</h2>
+                          <h2>Olá</h2>
                           <p>Agradecemos de coração pela sua compra. Use o QR Code abaixo para acessar seu produto e surpreenda seu parceiro(a).</p>
                           <div class="qr-code">
                               <img src="${qrCodeUrl}" alt="QR Code">
@@ -33,7 +33,7 @@ export class InviteTypeConstants {
                           <p>Se precisar de algo, estamos sempre aqui para ajudar.</p>
                       </div>
                       <div class="footer">
-                          <p>&copy; 2024 Invitemee. Todos os direitos reservados. Com amor!</p>
+                          <p>&copy; 2025 Cute Cards. Todos os direitos reservados. Com amor!</p>
                       </div>
                   </div>
               </body>
@@ -41,7 +41,7 @@ export class InviteTypeConstants {
           `;
   }
 
-  getBestFriendsContent(qrCodeUrl: string, clientName: string) {
+  getBestFriendsContent(qrCodeUrl: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -67,7 +67,7 @@ export class InviteTypeConstants {
                           <h1>Amizade é tudo!</h1>
                       </div>
                       <div class="body">
-                          <h2>Olá ${clientName}</h2>
+                          <h2>Olá</h2>
                           <p>Agradecemos pela sua compra. Use o QR Code abaixo para acessar seu produto e compartilhar momentos incríveis com seu melhor amigo(a).</p>
                           <div class="qr-code">
                               <img src="${qrCodeUrl}" alt="QR Code">
@@ -75,7 +75,7 @@ export class InviteTypeConstants {
                           <p>Conte conosco sempre que precisar.</p>
                       </div>
                       <div class="footer">
-                          <p>&copy; 2024 Invitemee. Todos os direitos reservados.</p>
+                          <p>&copy; 2025 Cute Cards. Todos os direitos reservados.</p>
                       </div>
                   </div>
               </body>
@@ -83,7 +83,7 @@ export class InviteTypeConstants {
           `;
   }
 
-  getBirthdayContent(qrCodeUrl: string, clientName: string) {
+  getBirthdayContent(qrCodeUrl: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -109,7 +109,7 @@ export class InviteTypeConstants {
                           <h1>Feliz Aniversário!</h1>
                       </div>
                       <div class="body">
-                          <h2>Olá ${clientName}</h2>
+                          <h2>Olá </h2>
                           <p>Desejamos tudo de bom no seu dia especial! Use o QR Code abaixo para acessar seu presente e tornar sua comemoração ainda mais incrível.</p>
                           <div class="qr-code">
                               <img src="${qrCodeUrl}" alt="QR Code">
@@ -117,7 +117,7 @@ export class InviteTypeConstants {
                           <p>Estamos aqui para ajudar no que precisar.</p>
                       </div>
                       <div class="footer">
-                          <p>&copy; 2024 Invitemee. Todos os direitos reservados. Celebre com alegria!</p>
+                          <p>&copy; 2025 Cute Cards. Todos os direitos reservados. Celebre com alegria!</p>
                       </div>
                   </div>
               </body>

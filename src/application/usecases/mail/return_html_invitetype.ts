@@ -4,24 +4,23 @@ import { InviteType } from '@application/entities/enums/inviteType';
 
 export function checkInviteTypeAndReturnHtml({
   inviteType,
-  clientName,
   inviteId,
 }: CreateSendEmailRequest): string {
-  const qrCodeUrl = `https://api.qrserver.com/v-1/create-qr-code/?size=150x150&data=http://localhost:3000/card/${inviteId}`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/page/${inviteId}`;
 
   const invite_type_constants = new InviteTypeConstants();
 
   switch (inviteType) {
     case InviteType.LOVE: {
-      return invite_type_constants.getLoveContent(qrCodeUrl, clientName);
+      return invite_type_constants.getLoveContent(qrCodeUrl);
     }
 
     case InviteType.BIRTHDAY: {
-      return invite_type_constants.getBirthdayContent(qrCodeUrl, clientName);
+      return invite_type_constants.getBirthdayContent(qrCodeUrl);
     }
 
     case InviteType.BESTFRIENDS: {
-      return invite_type_constants.getBestFriendsContent(qrCodeUrl, clientName);
+      return invite_type_constants.getBestFriendsContent(qrCodeUrl);
     }
 
     default: {

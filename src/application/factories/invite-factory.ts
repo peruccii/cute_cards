@@ -17,6 +17,7 @@ export function makeInvite(override: Override) {
     email: new Email(override.email),
     invite_plan: override.invite_plan,
     card_color: override.card_color,
+    bg_color: override.bg_color,
     names: override.names,
     payment_method: override.payment_method,
     invite_type: override.invite_type,
@@ -26,6 +27,6 @@ export function makeInvite(override: Override) {
         ? new UrlMusic(override.url_music)
         : null,
     message: new Message(override.message),
-    imageUrls: override.imageUrls,
+    image_urls: override.image_urls,
   });
 }

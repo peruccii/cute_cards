@@ -8,9 +8,10 @@ export default interface CheckoutRequest {
   invite_type: InviteType;
   title: string;
   sub_title: string;
-  imageUrls: string[];
+  image_urls: string[];
   message: string;
   card_color: string;
+  bg_color: string;
   names: string;
   url_music: string | null;
   date: Date;
