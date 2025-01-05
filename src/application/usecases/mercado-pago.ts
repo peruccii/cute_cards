@@ -1,72 +1,208 @@
 import { InvitePlan } from '@application/entities/enums/invitePlan';
+import { PaymentMethod } from '@application/entities/enums/paymentMethod';
+import { PaymentStatus } from '@application/entities/enums/paymentStatus';
+import { Email } from '@application/entities/fieldsValidations/email';
+import { Message } from '@application/entities/fieldsValidations/message';
+import { SubTitle } from '@application/entities/fieldsValidations/subTitle';
+import { Title } from '@application/entities/fieldsValidations/title';
+import { UrlMusic } from '@application/entities/fieldsValidations/url_music';
+import { Invite } from '@application/entities/invite';
+import { Payment as PaymentSession } from '@application/entities/payment';
 import { InvitePlanDetails } from '@application/entities/invite-plan-details';
+import PrismaCreateInviteRequest from '@application/interfaces/prismaCreateInviteRequest';
+import { FirebaseRepository } from '@application/repositories/firebase-repository';
+import {
+  CreateSendEmailRequest,
+  MailRepository,
+} from '@application/repositories/mail-repository';
 import { MercadoPagoRepository } from '@application/repositories/mercado-pago-repository';
+import { PrismaInviteMapper } from '@infra/database/prisma/mappers/prisma-invite-mappers';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { randomUUID } from 'node:crypto';
+import { PrismaPaymentMapper } from '@infra/database/prisma/mappers/prisma-payment-mapper';
+import { PaymentRepository } from '@application/repositories/payment-repository';
 
+@Injectable()
 export class MercadoPago implements MercadoPagoRepository {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private firebaseRepository: FirebaseRepository,
+    private readonly mailRepository: MailRepository,
+    private eventEmmiter: EventEmitter2,
+    private readonly paymentRepository: PaymentRepository,
+  ) {}
 
-  create(plan: InvitePlan, email: string) {
+  async create(
+    plan: InvitePlan,
+    email: string,
+    invite: Invite,
+  ): Promise<string> {
+    const token = this.configService.get<string>('ACCESS_TOKEN')!;
     const client = new MercadoPagoConfig({
-      accessToken: 'access_token',
+      accessToken: token,
       options: { timeout: 5000, idempotencyKey: 'abc' },
     });
 
     const payment = new Payment(client);
+    const prismaInvite = PrismaInviteMapper.toPrisma(invite);
+
+    const payment_body = {
+      id: prismaInvite.id,
+      email_user: prismaInvite.email,
+      status_payment: PaymentStatus.pending,
+      createdAt: prismaInvite.createdAt,
+    };
+
+    const prismaPayment = PrismaPaymentMapper.toPrisma(
+      payment_body as PaymentSession,
+    );
+
+    await this.paymentRepository.create(prismaPayment as PaymentSession);
 
     const notificationUrl = this.configService.get('WEBHOOK_URL_DEVELOPMENT');
 
     const body = {
-      transaction_amount: InvitePlanDetails.getPrice(plan),
+      transaction_amount: InvitePlanDetails.getPricePix(plan),
       description: `Pagamento via PIX do plano ${plan}`,
       payment_method_id: 'pix',
       payer: {
         email: email,
       },
       notification_url: notificationUrl,
+      metadata: {
+        id: prismaInvite.id,
+        url_music: prismaInvite.url_music || null,
+        invite_type: prismaInvite.invite_type,
+        invite_id: prismaInvite.id,
+        email: prismaInvite.email,
+        card_color: prismaInvite.card_color,
+        bg_color: prismaInvite.bg_color,
+        image_urls: prismaInvite.image_urls,
+        invite_plan: prismaInvite.invite_plan,
+        payment_method: PaymentMethod.PIX,
+        payment_status: PaymentStatus.pending,
+        date: prismaInvite.date.toISOString(),
+        title: prismaInvite.title,
+        names: prismaInvite.names,
+        sub_title: prismaInvite.sub_title,
+        message: prismaInvite.message,
+      },
     };
 
     const requestOptions = { idempotencyKey: randomUUID() };
 
-    payment
-      .create({ body, requestOptions })
-      .then((response) => {
-        return response.point_of_interaction?.transaction_data?.ticket_url;
-      })
-      .catch(console.log);
+    const response = await payment.create({ body, requestOptions });
+    if (response.point_of_interaction?.transaction_data?.ticket_url)
+      return response.point_of_interaction?.transaction_data?.ticket_url;
+    else return 'NA ticket_url';
   }
 
-  async createWebHook(req, res) {
-    console.log('Recebendo evento webhook:', req.body);
-
-    const { action, data } = req.body;
+  async createWebHook(body: any, res: any) {
+    const { action, data } = body;
 
     if (!action || !data?.id) {
-      return res.status(400).send('Invalid webhook event format');
+      return res.status(400);
     }
 
     if (action === 'payment.created' || action === 'payment.updated') {
       try {
         const client = new MercadoPagoConfig({
-          accessToken: 'access_token',
+          accessToken: this.configService.get<string>('ACCESS_TOKEN')!,
         });
 
         const payment = new Payment(client);
 
-        // Buscar detalhes do pagamento pelo ID
         const paymentDetails = await payment.get({ id: data.id });
 
         const paymentStatus = paymentDetails.status_detail;
 
-        if (paymentStatus === 'approved') {
-          console.log('O PAGAMENTO FOI APROVADO E RECEBA SEU PRÊMIO!');
+        const metadata = paymentDetails.metadata;
+
+        console.log('STATUS DO PAGAMENTO REAL', paymentStatus);
+        console.log('METADATA DO PAGAMENTO REAL', metadata);
+
+        const shouldSavePayment = (
+          statusDetail: string | undefined,
+        ): boolean => {
+          const rejectedStatus = [
+            'bank_error',
+            'cc_rejected_bad_filled_card_number',
+            'cc_rejected_bad_filled_date',
+            'cc_rejected_bad_filled_other',
+            'cc_rejected_bad_filled_security_code',
+            'cc_rejected_blacklist',
+            'cc_rejected_card_disabled',
+            'cc_rejected_card_error',
+            'cc_rejected_high_risk',
+            'cc_rejected_insufficient_amount',
+            'cc_rejected_invalid_installments',
+            'cc_rejected_max_attempts',
+            'cc_rejected_other_reason',
+            'cc_amount_rate_limit_exceeded',
+            'rejected_insufficient_data',
+            'rejected_by_bank',
+            'rejected_by_regulations',
+            'insufficient_amount',
+            'cc_rejected_card_type_not_allowed',
+          ];
+
+          return !rejectedStatus.includes(statusDetail!);
+        };
+
+        if (shouldSavePayment(paymentStatus)) {
+          const email = new Email(metadata.email);
+
+          const expirationDate = InvitePlanDetails.getDate(
+            metadata.invite_plan,
+          );
+
+          const url_music = metadata.url_music
+            ? new UrlMusic(metadata.url_music)
+            : null;
+
+          const dateNow = new Date();
+
+          const invite: PrismaCreateInviteRequest = {
+            id: metadata.id,
+            email: email,
+            date: metadata.date,
+            expirationDate: expirationDate,
+            title: new Title(metadata.title),
+            invite_plan: metadata.invite_plan,
+            card_color: metadata.card_color,
+            bg_color: metadata.bg_color,
+            payment_method: PaymentMethod.PIX,
+            names: metadata.names,
+            message: new Message(metadata.message),
+            sub_title: new SubTitle(metadata.sub_title),
+            url_music: url_music,
+            image_urls: metadata.image_urls,
+            createdAt: dateNow,
+            invite_type: metadata.invite_type,
+          };
+
+          const sendEmailRequest: CreateSendEmailRequest = {
+            email: email.value,
+            inviteType: metadata.invite_type,
+            inviteId: metadata.invite_id,
+          };
+
+          if (paymentStatus === 'accredited') {
+            this.eventEmmiter.emit('invite.created', {
+              ...invite,
+              payment_status: PaymentStatus.accredited,
+            });
+
+            this.mailRepository.sendEmail(sendEmailRequest);
+          }
         } else {
-          console.log(`Status do pagamento: ${paymentStatus}`);
+          this.firebaseRepository.delete(data.email);
         }
 
-        res.status(200).send('Webhook processed successfully');
+        res.status(200);
       } catch (error) {
         console.error('Erro ao processar webhook:', error);
         res
