@@ -63,7 +63,10 @@ export class HandleEventsStripe {
       ? new UrlMusic(metadata.url_music)
       : null;
 
-    const image_urls = await this.firebaseRepository.getImgUrls(email.value);
+    const e = metadata.email.slice(0, 3);
+    const slug = `slug-${e}-${metadata.invite_type}-${metadata.invite_plan}-${metadata.names}`;
+
+    const image_urls = await this.firebaseRepository.getImgUrls(slug);
 
     const request: CreateSendEmailRequest = {
       email: email.value,

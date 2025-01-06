@@ -5,6 +5,9 @@ import { PaymentStatus } from './enums/paymentStatus';
 export interface PaymentProps {
   status_payment: PaymentStatus;
   email_user: string;
+  it: string;
+  ip: string;
+  ns: string;
   createdAt: Date;
 }
 
@@ -34,6 +37,30 @@ export class Payment {
 
   public get email_user(): string {
     return this.props.email_user;
+  }
+
+  public set it(it: string) {
+    this.props.it = it;
+  }
+
+  public get it(): string {
+    return this.props.it;
+  }
+
+  public set ip(ip: string) {
+    this.props.ip = ip;
+  }
+
+  public get ip(): string {
+    return this.props.ip;
+  }
+
+  public set ns(ns: string) {
+    this.props.ns = ns;
+  }
+
+  public get ns(): string {
+    return this.props.ns;
   }
 
   public set status_payment(status_payment: PaymentStatus) {

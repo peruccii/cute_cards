@@ -8,6 +8,9 @@ export class PrismaPaymentMapper {
       id: payment.id,
       email_user: payment.email_user,
       createdAt: payment.createdAt,
+      it: payment.it,
+      ip: payment.ip,
+      ns: payment.ns,
       status_payment: payment.status_payment,
     };
   }
@@ -17,6 +20,9 @@ export class PrismaPaymentMapper {
       {
         email_user: raw.email_user,
         createdAt: raw.createdAt,
+        it: raw.it,
+        ip: raw.ip,
+        ns: raw.ns,
         status_payment: raw.status_payment as PaymentStatus,
       },
       raw.id,

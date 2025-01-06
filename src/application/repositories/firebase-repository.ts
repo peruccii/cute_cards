@@ -1,10 +1,10 @@
 export abstract class FirebaseRepository {
   abstract uploadImages(
     imagesUrl: Express.Multer.File[],
-    email: string,
+    slug: string,
   ): Promise<string[]>; // custom promise
 
-  abstract delete(emailUser: string);
+  abstract delete(slug: string);
 
-  abstract getImgUrls(emailUser: string): Promise<string[]>;
+  abstract getImgUrls(slug: string): Promise<string[]>;
 }

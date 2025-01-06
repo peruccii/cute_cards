@@ -43,7 +43,7 @@ export class MercadoPago implements MercadoPagoRepository {
     const token = this.configService.get<string>('ACCESS_TOKEN')!;
     const client = new MercadoPagoConfig({
       accessToken: token,
-      options: { timeout: 5000, idempotencyKey: 'abc' },
+      options: { timeout: 5000, idempotencyKey: `payment-${invite.id}` },
     });
 
     const payment = new Payment(client);
@@ -52,6 +52,9 @@ export class MercadoPago implements MercadoPagoRepository {
     const payment_body = {
       id: prismaInvite.id,
       email_user: prismaInvite.email,
+      it: prismaInvite.invite_type,
+      ip: prismaInvite.invite_plan,
+      ns: prismaInvite.names,
       status_payment: PaymentStatus.pending,
       createdAt: prismaInvite.createdAt,
     };
@@ -120,7 +123,7 @@ export class MercadoPago implements MercadoPagoRepository {
         const paymentStatus = paymentDetails.status_detail;
 
         const metadata = paymentDetails.metadata;
-
+        console.log('id', data.id);
         console.log('STATUS DO PAGAMENTO REAL', paymentStatus);
         console.log('METADATA DO PAGAMENTO REAL', metadata);
 
@@ -153,6 +156,11 @@ export class MercadoPago implements MercadoPagoRepository {
         };
 
         if (shouldSavePayment(paymentStatus)) {
+          //
+          if (paymentDetails.status === 'pending') {
+            return;
+          }
+
           const email = new Email(metadata.email);
 
           const expirationDate = InvitePlanDetails.getDate(
@@ -199,7 +207,10 @@ export class MercadoPago implements MercadoPagoRepository {
             this.mailRepository.sendEmail(sendEmailRequest);
           }
         } else {
-          this.firebaseRepository.delete(data.email);
+          const email = new Email(metadata.email);
+          const e = email.value.slice(0, 3);
+          const slug = `slug-${e}-${metadata.invite_type}-${metadata.invite_plan}-${metadata.names}`;
+          this.firebaseRepository.delete(slug);
         }
 
         res.status(200);

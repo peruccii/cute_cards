@@ -21,9 +21,9 @@ export class Resendmail implements MailRepository {
     request: CreateSendEmailRequest,
   ): Promise<CreateEmailResponse> {
     const response = await this.resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'no-reply@cutecards.com.br',
       to: [request.email],
-      subject: 'hello world',
+      subject: 'QRCODE [Cute Cards] - Obrigado pela compra!',
       html: checkInviteTypeAndReturnHtml(request),
     });
 

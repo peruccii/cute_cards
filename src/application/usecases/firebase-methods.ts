@@ -6,10 +6,15 @@ import * as admin from 'firebase-admin';
 @Injectable()
 export class Firebase implements FirebaseRepository {
   constructor(private configService: ConfigService) {
-    const serviceAccountPath = this.configService.get('SERVICE_ACCOUNT_PATH');
     if (admin.apps.length === 0) {
       admin.initializeApp({
-        credential: admin.credential.cert(serviceAccountPath),
+        credential: admin.credential.cert({
+          projectId: this.configService.get('PROJECT_ID'),
+          privateKey: this.configService
+            .get('PRIVATE_KEY')
+            .replace(/\\n/g, '\n'),
+          clientEmail: this.configService.get('CLIENT_EMAIL'),
+        }),
         storageBucket: this.configService.get('STORAGE_BUCKET_NAME'),
       });
     }
@@ -35,15 +40,24 @@ export class Firebase implements FirebaseRepository {
     return urls;
   }
 
-  async delete(emailUser: string) {
+  async delete(slug: string) {
     const bucket = admin.storage().bucket();
-    bucket.file(emailUser).delete();
+
+    const [files] = await bucket.getFiles({ prefix: slug });
+
+    if (files.length === 0) {
+      console.log(`Nenhum arquivo encontrado no diretório: ${slug}`);
+      return;
+    }
+
+    const deletePromises = files.map((file) => file.delete());
+    await Promise.all(deletePromises);
   }
 
-  async getImgUrls(emailUser: string): Promise<string[]> {
+  async getImgUrls(slug: string): Promise<string[]> {
     const bucket = admin.storage().bucket();
 
-    const [files] = await bucket.getFiles({ prefix: emailUser });
+    const [files] = await bucket.getFiles({ prefix: slug });
 
     const urls = files.map((file) => {
       return `https://storage.googleapis.com/${bucket.name}/${file.name}`;

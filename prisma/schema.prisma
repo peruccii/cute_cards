@@ -56,5 +56,8 @@ model Payment {
   id             String        @id
   status_payment PaymentStatus
   createdAt      DateTime
+  it             String
+  ip             String
+  ns             String
   email_user     String
 }

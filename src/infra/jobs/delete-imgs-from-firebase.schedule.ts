@@ -25,7 +25,11 @@ export class DeleteImgsFromFirebaseSchedule {
     });
 
     for (const payment of expiredPayments) {
-      await this.firebaseRepository.delete(payment.email_user);
+      const e = payment.email_user.slice(0, 3);
+      const slug = `slug-${e}-${payment.it}-${payment.ip}-${payment.ns}`;
+      await this.firebaseRepository.delete(slug);
+      await this.prisma.payment.delete({ where: { id: payment.id } });
     }
+    console.log('IMAGENS APAGADAS');
   }
 }
