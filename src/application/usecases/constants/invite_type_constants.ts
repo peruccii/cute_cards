@@ -1,5 +1,5 @@
 export class InviteTypeConstants {
-  getLoveContent(qrCodeUrl: string) {
+  getLoveContent(qrCodeUrl: string, link: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -15,6 +15,7 @@ export class InviteTypeConstants {
                       .body h2 { color: #333; font-size: 22px; }
                       .body p { color: #666; line-height: 1.6; font-size: 16px; }
                       .qr-code { margin: 20px 0; }
+                      .link-text { margin-top: 10px; color: #ff6f61; font-size: 16px; }
                       .qr-code img { width: 150px; height: 150px; border: 2px solid #ff6f61; border-radius: 8px; }
                       .footer { background-color: #ff6f61; color: #ffffff; padding: 10px; text-align: center; font-size: 12px; }
                   </style>
@@ -31,6 +32,9 @@ export class InviteTypeConstants {
                               <img src="${qrCodeUrl}" alt="QR Code">
                           </div>
                           <p>Se precisar de algo, estamos sempre aqui para ajudar.</p>
+                          <div class="link-text">
+                                         <p>Caso o QR Code não funcione, você pode acessar o seu produto diretamente pelo <a href="${link}" target="_blank" style="color: #ff6f61;">link aqui</a>.</p>
+                                     </div>
                       </div>
                       <div class="footer">
                           <p>&copy; 2025 Cute Cards. Todos os direitos reservados. Com amor!</p>
@@ -41,7 +45,7 @@ export class InviteTypeConstants {
           `;
   }
 
-  getBestFriendsContent(qrCodeUrl: string) {
+  getBestFriendsContent(qrCodeUrl: string, link: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -57,6 +61,7 @@ export class InviteTypeConstants {
                       .body h2 { color: #333; font-size: 22px; }
                       .body p { color: #666; line-height: 1.6; font-size: 16px; }
                       .qr-code { margin: 20px 0; }
+                       .link-text { margin-top: 10px; color: #ff6f61; font-size: 16px; }
                       .qr-code img { width: 150px; height: 150px; border: 2px solid #5f9ea0; border-radius: 8px; }
                       .footer { background-color: #5f9ea0; color: #ffffff; padding: 10px; text-align: center; font-size: 12px; }
                   </style>
@@ -73,6 +78,9 @@ export class InviteTypeConstants {
                               <img src="${qrCodeUrl}" alt="QR Code">
                           </div>
                           <p>Conte conosco sempre que precisar.</p>
+                          <div class="link-text">
+                                         <p>Caso o QR Code não funcione, você pode acessar o seu produto diretamente pelo <a href="${link}" target="_blank" style="color: #ff6f61;">link aqui</a>.</p>
+                                     </div>
                       </div>
                       <div class="footer">
                           <p>&copy; 2025 Cute Cards. Todos os direitos reservados.</p>
@@ -83,7 +91,7 @@ export class InviteTypeConstants {
           `;
   }
 
-  getBirthdayContent(qrCodeUrl: string) {
+  getBirthdayContent(qrCodeUrl: string, link: string) {
     return `
               <!DOCTYPE html>
               <html lang="en">
@@ -99,6 +107,7 @@ export class InviteTypeConstants {
                       .body h2 { color: #333; font-size: 22px; }
                       .body p { color: #666; line-height: 1.6; font-size: 16px; }
                       .qr-code { margin: 20px 0; }
+                       .link-text { margin-top: 10px; color: #ff6f61; font-size: 16px; }
                       .qr-code img { width: 150px; height: 150px; border: 2px solid #ffd54f; border-radius: 8px; }
                       .footer { background-color: #ffd54f; color: #ffffff; padding: 10px; text-align: center; font-size: 12px; }
                   </style>
@@ -115,6 +124,9 @@ export class InviteTypeConstants {
                               <img src="${qrCodeUrl}" alt="QR Code">
                           </div>
                           <p>Estamos aqui para ajudar no que precisar.</p>
+                          <div class="link-text">
+                                         <p>Caso o QR Code não funcione, você pode acessar o seu produto diretamente pelo <a href="${link}" target="_blank" style="color: #ff6f61;">link aqui</a>.</p>
+                                     </div>
                       </div>
                       <div class="footer">
                           <p>&copy; 2025 Cute Cards. Todos os direitos reservados. Celebre com alegria!</p>
