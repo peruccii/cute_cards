@@ -9,9 +9,10 @@ import { PaymentModule } from '../payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
 import { InviteRepository } from '@application/repositories/invite-repository';
 import { PrismaInviteRepository } from '../repositories/prisma-invite-repository';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
-  imports: [PaymentModule, ConfigModule],
+  imports: [PaymentModule, ConfigModule, PrismaService],
   providers: [
     MercadoPago,
     {
