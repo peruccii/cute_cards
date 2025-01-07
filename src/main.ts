@@ -13,7 +13,7 @@ async function bootstrap() {
   dotenv.config();
 
   app.enableCors({
-    origin: '*', // change to my own dominio
+    origin: 'https://www.cutecards.com.br',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept, Authorization',
   });
