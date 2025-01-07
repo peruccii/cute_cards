@@ -122,6 +122,10 @@ export class MercadoPago implements MercadoPagoRepository {
 
         const paymentStatus = paymentDetails.status_detail;
 
+        if (paymentDetails.status === 'pending') {
+          return;
+        }
+
         const metadata = paymentDetails.metadata;
         console.log('id', data.id);
         console.log('STATUS DO PAGAMENTO REAL', paymentStatus);
@@ -157,9 +161,6 @@ export class MercadoPago implements MercadoPagoRepository {
 
         if (shouldSavePayment(paymentStatus)) {
           //
-          if (paymentDetails.status === 'pending') {
-            return;
-          }
 
           const email = new Email(metadata.email);
 
