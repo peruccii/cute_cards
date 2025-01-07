@@ -7,6 +7,15 @@ import { PrismaPaymentMapper } from '../prisma/mappers/prisma-payment-mapper';
 @Injectable()
 export class PrismaPaymentRepository implements PaymentRepository {
   constructor(private prisma: PrismaService) {}
+  async findById(id_payment: string): Promise<Payment | null> {
+    const payment = await this.prisma.payment.findFirst({
+      where: { id: id_payment },
+    });
+
+    if (!payment) return null;
+
+    return PrismaPaymentMapper.toDomain(payment);
+  }
 
   async create(payment: Payment) {
     const raw = PrismaPaymentMapper.toPrisma(payment);

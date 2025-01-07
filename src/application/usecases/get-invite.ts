@@ -18,7 +18,7 @@ export class GetInvite {
     const { id } = request;
     const invite = await this.inviteRepository.find(id);
 
-    if (!invite) throw new Error('');
+    if (!invite) throw new Error('Invite not found');
 
     return { invite };
   }

@@ -122,14 +122,19 @@ export class MercadoPago implements MercadoPagoRepository {
 
         const paymentStatus = paymentDetails.status_detail;
 
-        if (paymentDetails.status === 'pending') {
+        const metadata = paymentDetails.metadata;
+
+        const existingPayment = await this.paymentRepository.findById(
+          metadata.id,
+        );
+
+        if (
+          existingPayment &&
+          existingPayment.status_payment === PaymentStatus.accredited
+        ) {
+          console.log('Payment already accredited. Skipping further actions.');
           return;
         }
-
-        const metadata = paymentDetails.metadata;
-        console.log('id', data.id);
-        console.log('STATUS DO PAGAMENTO REAL', paymentStatus);
-        console.log('METADATA DO PAGAMENTO REAL', metadata);
 
         const shouldSavePayment = (
           statusDetail: string | undefined,
