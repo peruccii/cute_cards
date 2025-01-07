@@ -6,7 +6,7 @@ export function checkInviteTypeAndReturnHtml({
   inviteType,
   inviteId,
 }: CreateSendEmailRequest): string {
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://localhost:3000/page/${inviteId}`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://https://cutecards.com.br/page/${inviteId}`;
 
   const invite_type_constants = new InviteTypeConstants();
 

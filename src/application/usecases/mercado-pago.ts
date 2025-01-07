@@ -24,6 +24,7 @@ import { MercadoPagoConfig, Payment } from 'mercadopago';
 import { randomUUID } from 'node:crypto';
 import { PrismaPaymentMapper } from '@infra/database/prisma/mappers/prisma-payment-mapper';
 import { PaymentRepository } from '@application/repositories/payment-repository';
+import { InviteRepository } from '@application/repositories/invite-repository';
 
 @Injectable()
 export class MercadoPago implements MercadoPagoRepository {
@@ -32,6 +33,7 @@ export class MercadoPago implements MercadoPagoRepository {
     private firebaseRepository: FirebaseRepository,
     private readonly mailRepository: MailRepository,
     private eventEmmiter: EventEmitter2,
+    private readonly inviteRepository: InviteRepository,
     private readonly paymentRepository: PaymentRepository,
   ) {}
 
@@ -128,14 +130,6 @@ export class MercadoPago implements MercadoPagoRepository {
           metadata.id,
         );
 
-        if (
-          existingPayment &&
-          existingPayment.status_payment === PaymentStatus.accredited
-        ) {
-          console.log('Payment already accredited. Skipping further actions.');
-          return;
-        }
-
         const shouldSavePayment = (
           statusDetail: string | undefined,
         ): boolean => {
@@ -205,11 +199,17 @@ export class MercadoPago implements MercadoPagoRepository {
           };
 
           if (paymentStatus === 'accredited') {
-            this.eventEmmiter.emit('invite.created', {
-              ...invite,
-              payment_status: PaymentStatus.accredited,
-            });
+            if (
+              existingPayment &&
+              existingPayment.status_payment === PaymentStatus.accredited
+            ) {
+              console.log(
+                'Payment already accredited. Skipping further actions.',
+              );
+              return;
+            }
 
+            await this.inviteRepository.create(invite as Invite);
             this.mailRepository.sendEmail(sendEmailRequest);
           }
         } else {
