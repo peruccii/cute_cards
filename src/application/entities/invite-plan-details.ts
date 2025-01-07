@@ -26,9 +26,9 @@ export class InvitePlanDetails {
   static getPricePix(plan: InvitePlan): number {
     switch (plan) {
       case InvitePlan.BASIC:
-        return 0.1;
+        return 10;
       case InvitePlan.PREMIUM:
-        return 0.1;
+        return 20;
     }
   }
 }
