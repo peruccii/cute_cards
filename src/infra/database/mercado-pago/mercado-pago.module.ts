@@ -7,6 +7,8 @@ import { MailRepository } from '@application/repositories/mail-repository';
 import { Resendmail } from '@application/usecases/mail/resend-mail.service';
 import { PaymentModule } from '../payment/payment.module';
 import { ConfigModule } from '@nestjs/config';
+import { InviteRepository } from '@application/repositories/invite-repository';
+import { PrismaInviteRepository } from '../repositories/prisma-invite-repository';
 
 @Module({
   imports: [PaymentModule, ConfigModule],
@@ -23,6 +25,10 @@ import { ConfigModule } from '@nestjs/config';
     {
       provide: MailRepository,
       useClass: Resendmail,
+    },
+    {
+      provide: InviteRepository,
+      useClass: PrismaInviteRepository,
     },
   ],
   exports: [MercadoPagoRepository],
