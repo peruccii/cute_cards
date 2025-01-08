@@ -7,6 +7,16 @@ import { PrismaPaymentMapper } from '../prisma/mappers/prisma-payment-mapper';
 @Injectable()
 export class PrismaPaymentRepository implements PaymentRepository {
   constructor(private prisma: PrismaService) {}
+
+  async updateStatus(id_payment: string) {
+    await this.prisma.payment.update({
+      where: { id: id_payment },
+      data: {
+        status_payment: 'accredited',
+      },
+    });
+  }
+
   async findById(id_payment: string): Promise<Payment | null> {
     const payment = await this.prisma.payment.findFirst({
       where: { id: id_payment },

@@ -210,6 +210,7 @@ export class MercadoPago implements MercadoPagoRepository {
             }
 
             await this.inviteRepository.create(invite as Invite);
+            await this.paymentRepository.updateStatus(invite.id);
             this.mailRepository.sendEmail(sendEmailRequest);
           }
         } else {
