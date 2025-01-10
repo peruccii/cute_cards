@@ -14,6 +14,6 @@ export default interface CheckoutRequest {
   bg_color: string;
   names: string;
   url_music: string | null;
-  date: Date;
+  date: Date | null;
   expirationDate: Date;
 }

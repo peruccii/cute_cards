@@ -11,7 +11,7 @@ import { Replace } from '@application/helpers/replace';
 import { PaymentMethod } from './enums/paymentMethod';
 
 export interface InviteProps {
-  date: Date;
+  date: Date | null;
   url_music: UrlMusic | null;
   email: Email;
   title: Title;
@@ -44,7 +44,7 @@ export class Invite {
     return this._id;
   }
 
-  public set date(date: Date) {
+  public set date(date: Date | null) {
     this.props.date = date;
   }
 
@@ -56,7 +56,7 @@ export class Invite {
     this.props.expirationDate = expirationDate;
   }
 
-  public get date(): Date {
+  public get date(): Date | null {
     return this.props.date;
   }
 

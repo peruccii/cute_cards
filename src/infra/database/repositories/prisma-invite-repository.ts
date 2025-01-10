@@ -20,7 +20,10 @@ export class PrismaInviteRepository implements InviteRepository {
   async create(invite: Invite): Promise<void> {
     const raw = PrismaInviteMapper.toPrisma(invite);
     await this.prisma.invite.create({
-      data: raw,
+      data: {
+        ...raw,
+        date: raw.date || null, // Garante compatibilidade com `string | Date`
+      },
     });
   }
 

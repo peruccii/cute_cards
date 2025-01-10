@@ -89,7 +89,7 @@ export class MercadoPago implements MercadoPagoRepository {
         invite_plan: prismaInvite.invite_plan,
         payment_method: PaymentMethod.PIX,
         payment_status: PaymentStatus.pending,
-        date: prismaInvite.date.toISOString(),
+        date: (prismaInvite.date && prismaInvite.date.toISOString()) || null,
         title: prismaInvite.title,
         names: prismaInvite.names,
         sub_title: prismaInvite.sub_title,

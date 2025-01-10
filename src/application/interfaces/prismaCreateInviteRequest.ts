@@ -22,6 +22,6 @@ export default interface PrismaCreateInviteRequest {
   names: string;
   createdAt: Date;
   url_music: UrlMusic | null;
-  date: Date;
+  date: Date | null;
   expirationDate: Date;
 }

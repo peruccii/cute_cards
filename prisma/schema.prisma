@@ -34,7 +34,7 @@ enum PaymentStatus {
 
 model Invite {
   id             String        @id
-  date           DateTime
+  date           DateTime?
   url_music      String?
   email          String
   title          String

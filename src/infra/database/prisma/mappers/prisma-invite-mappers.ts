@@ -40,7 +40,7 @@ export class PrismaInviteMapper {
           ? invite.url_music.value
           : null,
 
-      date: invite.date,
+      date: invite.date ? invite.date : null,
       expirationDate: invite.expirationDate,
       createdAt: invite.createdAt,
     };
@@ -61,7 +61,7 @@ export class PrismaInviteMapper {
         message: new Message(raw.message),
         url_music:
           raw.url_music && raw.url_music ? new UrlMusic(raw.url_music) : null,
-        date: raw.date,
+        date: raw.date ? raw.date : null,
         expirationDate: raw.expirationDate,
         createdAt: raw.createdAt,
       },
